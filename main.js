@@ -1,6 +1,7 @@
 var cmellontxt;
 
 var allWordData = [];
+var allWordDatawClusters = [];
 var colors = ["yellow", "aquamarine", "chartreuse","fuchsia"];
 var colorcount = 0;
 var paragraphs = [];
@@ -54,7 +55,73 @@ var onPush = function() {
 				word = "";
 			}
 			
+			
+	
 	// BY THIS TIME, INPUTARR CONTAINS ALL WORDS AND ALL PUNCTUATION
+	
+	//TODO: Make it so each word is its own Array, 
+	
+	var clusterArr = [];
+	var c = [];
+	var lastId = "";
+	
+	for (var i = 0; i < inputArr.length; i++) {
+		
+		var w = inputArr[i];
+		
+		for (var q = 0; q < w.length; q++) {
+			
+			var s = w.charAt(q);
+			
+			if (s == "a" || s == "i" || s == "o" || s == "e" || s == "u") {
+				
+				if (c.length == 0) {
+					c.push(s);
+					lastId = "v";
+				} else if (lastId == "v") {
+					c.push(s);
+				} else {
+					clusterArr.push(c);
+					c = [];
+					c.push(s);
+					lastId = "v";
+				}
+				
+			} else if (!checkIfPunc(s)) {
+				
+				if (c.length == 0) {// This is right at the start
+					c.push(s);
+					lastId = "p";
+				} else if (lastId == "p") { // It sees punc before
+					c.push(s);
+				} else { // It sees no punc before, so pushes the 
+					clusterArr.push(c);
+					c = [];
+					c.push(s);
+					lastId = "p";
+				}
+				
+			} else {
+				if (c.length == 0) { 
+					c.push(s);
+					lastId = "c";
+				} else if (lastId == "c") {
+					c.push(s);
+				} else {
+					clusterArr.push(c);
+					c = [];
+					c.push(s);
+					lastId = "c";
+				}
+			}
+			
+		}
+		
+		
+		
+	}
+	
+	console.log(clusterArr);
 	
 	
 	var out = document.getElementById("output-txt"); // Clears output text
@@ -81,7 +148,7 @@ var onPush = function() {
 				
 				var l = inputArr[i].charAt(s);
 				
-				if (l == "\"" || l == "\'" || l == "\n" || l == "\r\n" || l == "“" || l == "\“" || l == "\”" || l == "\’" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")") {
+				if (checkIfPunc(l)) {
 					
 				} else {
 					cleanedResult += l;
@@ -130,7 +197,17 @@ var onPush = function() {
 		
 	// TODO: Put the Punctuation Back In
 	
-	console.log(allWordData);
+	
+	
+}
+
+var checkIfPunc = function (l) {
+	
+	if (l == "\"" || l == "\'" || l == "\n" || l == "\r\n" || l == "“" || l == "\“" || l == "\”" || l == "\’" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")") {
+		return true;
+	} else {
+		return false;
+	}
 	
 }
 

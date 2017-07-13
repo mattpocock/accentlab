@@ -1,6 +1,9 @@
 var cmellontxt;
 
 var allWordData = [];
+var noTransWords = [];
+var fullWordTranslations = [];
+var allClusterData = [];
 var colors = ["#ffea74", "#d374ff", "#ff749b","#a0ff74", "#9074ff", "#74c7ff", "#ffa778"];
 var colorcount = 0;
 var paragraphs = [];
@@ -10,6 +13,7 @@ var onPush = function() {
 	allWordData = [];
 	colorcount = 0;
 	paragraphs = [];
+	fullWordTranslations = [];
 	
 	var input = document.getElementById("input-txt").value;
 	
@@ -55,6 +59,12 @@ var onPush = function() {
 			}
 			
 	// BY THIS TIME, INPUTARR CONTAINS ALL WORDS AND ALL PUNCTUATION
+	
+	noTransWords = [];
+	
+	noTransWords = inputArr;
+	
+	console.log(noTransWords);
 	
 	
 	var out = document.getElementById("output-txt"); // Clears output text
@@ -115,11 +125,11 @@ var onPush = function() {
 			
 			result = mellonToPhonetics(result);
 			
-			
+			fullWordTranslations.push(result);
 			
 			// PRINTS TO PAGE
 			
-			var toInsert = $('<a class="word-anchor tooltip" onclick="highlight('+ i +')"id="word'+i+'">' + inputArr[i] + '<span class="tooltiptext">'+ result +'</a>')
+			var toInsert = $('<div class="word-anchor tooltip" onclick="highlight('+ i +')"id="word'+i+'">' + noTransWords[i] + '<span class="tooltiptext">'+ result +'</a>')
 				
 			$( "#output-txt" ).append(toInsert);
 				
@@ -127,10 +137,86 @@ var onPush = function() {
 			
 	
 	}
-		
-	// TODO: Put the Punctuation Back In
 	
-	console.log(allWordData);
+	// Clusters
+	
+	allClusterData = [];
+	
+	function cluster (type, chars) {
+    this.type = type;
+    this.chars = chars;
+}
+	
+	
+	for (var i = 0; i < noTransWords.length; i++) {
+		
+		var toInput = [];
+		var prevType = "start";
+		var chars = "";
+		var type = "";
+		
+		for (var j = 0; j < noTransWords[i].length; j++) {
+			
+			var l = noTransWords[i][j];
+			
+			if (l == "a" || l == "e" || l == "i" || l == "o" || l == "u" || l == "A" || l == "E" || l == "I" || l == "O" || l == "U") {
+				
+				if (prevType == "start") {
+					type = "vowel";
+					chars = l;
+					prevType = "vowel";
+				} else if (prevType == "vowel") {
+					chars += l;
+				} else {
+					toInput.push(new cluster(type, chars));
+					type = "vowel";
+					chars = l;
+					prevType = "vowel";
+				}
+				
+			} else if (l == "\"" || l == "\'" || l == "\n" || l == "\r\n" || l == "“" || l == "\“" || l == "\”" || l == "\’" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")"){
+				if (prevType == "start") {
+					type = "punc";
+					chars = l;
+					prevType = "punc";
+				} else if (prevType == "punc") {
+					chars += l;
+				} else {
+					toInput.push(new cluster(type, chars));
+					type = "punc";
+					chars = l;
+					prevType = "punc";
+				}
+			} else {
+				if (prevType == "start") {
+					type = "cons";
+					chars = l;
+					prevType = "cons";
+				} else if (prevType == "cons") {
+					chars += l;
+				} else {
+					toInput.push(new cluster(type, chars));
+					type = "cons";
+					chars = l;
+					prevType = "cons";
+				}
+			}
+			
+			if (j == noTransWords[i].length - 1) {
+				toInput.push(new cluster(type, chars));
+			}
+			
+			
+			
+		}
+		
+		allClusterData.push(toInput);
+		
+	}
+		
+	
+	console.log(allClusterData);
+	
 	
 }
 
@@ -390,6 +476,15 @@ var nonRhoticScan = function(sym) {
 	//TODO: Do REVERSE
 	if (found) {colorcount++;};
 	
+}
+
+function objIsEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return JSON.stringify(obj) === JSON.stringify({});
 }
 
 var vowelAfterScan = function (sym) {

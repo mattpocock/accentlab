@@ -1,0 +1,69 @@
+<html>
+<head>
+<link rel="stylesheet" href="stylesheet.css">
+<meta charset="UTF-8">
+</head>
+<body>
+
+<div id="input-div">
+	<textarea id="input-txt" style="width:320px;height:240px;">He said in a statement: Testing an ICBM represents a new escalation of the threat to the United States, our allies and partners, the region, and the world. All nations should publicly demonstrate to North Korea that there are consequences to their pursuit of nuclear weapons.</textarea>
+	<button class="sound-btn" id="button" onclick="onPush();">Convert</button>
+	<button class="sound-btn" id="reset-btn" onclick="resetScans();">Reset</button>
+	<a href="#" target="_blank">New Page</a>
+	
+</div>
+
+<div id="btns-div">
+	
+	<button class="sound-btn" onclick="scanFor('TH')">Unvoiced TH</button>
+	<button class="sound-btn" onclick="scanFor('DH')">Voiced TH</button>
+	<button class="sound-btn" onclick="scanFor('S')">'S' Sound</button>
+	<button class="sound-btn" onclick="scanFor('Z')">'Z' Sound</button>
+	<br>
+	<button class="sound-btn" onclick="scanFor('F')">F Sound</button>
+	<button class="sound-btn" onclick="scanFor('V')">V Sound</button>
+	<button class="sound-btn" onclick="scanFor('HH')">H Sound</button>
+	<button class="sound-btn" onclick="scanFor('SH')">Sh Sound</button>
+	<button class="sound-btn" onclick="scanFor('ZH')">Zh Sound</button>
+	<br>
+	<button class="sound-btn" onclick="scanFor('P')">'P' Sound</button>
+	<button class="sound-btn" onclick="scanFor('B')">'B' Sound</button>
+	<button class="sound-btn" onclick="scanFor('T')">T Sound</button>
+	<button class="sound-btn" onclick="scanFor('D')">D Sound</button>
+	<button class="sound-btn" onclick="scanFor('K')">K Sound</button>
+	<button class="sound-btn" onclick="scanFor('G')">G Sound</button>
+	<br>
+	<button class="sound-btn" onclick="scanFor('CH')">CH Sound</button>
+	<button class="sound-btn" onclick="scanFor('JH')">J Sound</button>
+	<br>
+	<button class="sound-btn" onclick="scanFor('M')">M Sound</button>
+	<button class="sound-btn" onclick="scanFor('N')">N Sound</button>
+	<button class="sound-btn" onclick="scanFor('NG')">NG Sound</button>
+	<br>
+	<!-- <button class="sound-btn" onclick="scanFor('L')">All L Sounds</button> -->
+	<button class="sound-btn" onclick="vowelAfterScan('L')">Light L Sounds</button>
+	<button class="sound-btn" onclick="darkLScan('L')">Dark L Sounds</button>
+	<!-- <button class="sound-btn" onclick="scanFor('R')">All R Sounds</button> -->
+	<button class="sound-btn" onclick="vowelAfterScan('R')">Voiced R Sounds</button>
+	<button class="sound-btn" onclick="nonRhoticScan('R')">Dropped R's</button>
+	<br>
+	<button class="sound-btn" onclick="scanFor('Y')">Y Sound</button>
+	<button class="sound-btn" onclick="scanFor('W')">W Sound</button>
+	<br>
+	<button class="sound-btn" onclick="scanFor('IH')">Short IH</button>
+	<button class="sound-btn" onclick="scanFor('UH')">Short Ooh</button>
+	<button class="sound-btn" onclick="scanFor('IY1', 'IY2')">Long EE</button>
+	<button class="sound-btn" onclick="scanFor('UW')">Long OO</button>
+	<button class="sound-btn" onclick="scanFor('ER0','AH0')">Schwa</button>
+	<button class="sound-btn" onclick="scanFor('AE','AA','AY','AW')">Drop The Jaw</button>
+
+</div>
+
+<div id="output-div">
+	<p id="output-txt">Output Goes Here</p>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="main.js"></script>
+</body>
+</html>

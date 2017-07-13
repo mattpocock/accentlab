@@ -252,7 +252,10 @@ var onPush = function() {
 		var letters = [];
 		var lastAnalysed = "";
 		
-		for (var j = 0; j < allClusterData[i].length && j < allWordData[i].length-1; j++) {
+		//TODO: Change this so that it uses each cluster as a marker, and puts in the phonetics based on the type.
+		//      So if it's a consonant, it'll find all the consonants in the cluster and put them in an array.
+		
+		for (var j = 0; j < allClusterData[i].length && j < allWordData[i].length-1; j++) { 
 			
 			if (allClusterData[i][j].type == "punc") {
 				

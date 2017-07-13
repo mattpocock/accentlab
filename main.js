@@ -3,6 +3,7 @@ var cmellontxt;
 var allWordData = [];
 var noTransWords = [];
 var fullWordTranslations = [];
+var phonComparisons = [];
 var allClusterData = [];
 var colors = ["#ffea74", "#d374ff", "#ff749b","#a0ff74", "#9074ff", "#74c7ff", "#ffa778"];
 var colorcount = 0;
@@ -63,8 +64,6 @@ var onPush = function() {
 	noTransWords = [];
 	
 	noTransWords = inputArr;
-	
-	console.log(noTransWords);
 	
 	
 	var out = document.getElementById("output-txt"); // Clears output text
@@ -139,7 +138,7 @@ var onPush = function() {
 	function cluster (type, chars) {
     this.type = type;
     this.chars = chars;
-}
+	}
 	
 	
 	for (var i = 0; i < noTransWords.length; i++) {
@@ -207,9 +206,6 @@ var onPush = function() {
 		allClusterData.push(toInput);
 		
 	}
-		
-	
-	console.log(allClusterData);
 	
 	// Prints to Page
 	
@@ -219,15 +215,84 @@ var onPush = function() {
 		
 		for (var j = 0; j < allClusterData[i].length; j++) {
 			
-			insideDiv += "<a id='cluster"+i+"-"+j+"'>" + allClusterData[i][j].chars + "</a>";
+			insideDiv += "<a id='cluster"+i+"-"+j+"' onclick='highlight("+ i + "," + j +")'>" + allClusterData[i][j].chars + "</a>";
 			
 		}
 		
-		var toInsert = $('<div class="tooltip" onclick="highlight('+ i +')"id="word'+i+'">' + insideDiv + '<span class="tooltiptext">'+ fullWordTranslations[i] +'</div>');
+		var toInsert = $('<span class="tooltip" "id="word'+i+'">' + insideDiv + '<span class="tooltiptext">'+ fullWordTranslations[i] +'</span>');
 			
 		$( "#output-txt" ).append(toInsert);
 		
 	}
+	
+	var checkIfMatch = function (clus, phon) {
+		
+		if (clus == "vowel" && checkIfVowel(phon)) {
+			return true;
+		} else if (clus == "cons" && !checkIfVowel(phon)) {
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
+	phonComparisons = [];
+	
+	function comparison (phons, letters) {
+    this.phons = phons;
+    this.letters = letters;
+	}
+	
+	// Compare allClusterData to allWordData
+	
+	for (var i = 0; i < allClusterData.length; i++) {
+		
+		var phons = [];
+		var letters = [];
+		var lastAnalysed = "";
+		
+		for (var j = 0; j < allClusterData[i].length && j < allWordData[i].length-1; j++) {
+			
+			if (allClusterData[i][j].type == "punc") {
+				
+				phons.push("");
+				letters.push("");
+				
+			} else if (checkIfMatch(allClusterData[i][j].type, allWordData[i][j+1])) { // Check if they match type. If they do, put both in.
+				
+				phons.push(allWordData[i][j+1]);
+				letters.push(allClusterData[i][j].chars);
+				lastAnalysed = allClusterData[i][j].type;
+				
+			} else if (allClusterData[i][j].type == "cons" && lastAnalysed == "cons") { // We know they don't match type, so the other one must be a consonant.
+				
+				phons.push("");
+				letters.push(allClusterData[i][j].chars);
+				
+			} else if (allClusterData[i][j].type == "vowel" && lastAnalysed == "vowel") {
+				phons.push(allClusterData[i][j].chars);
+				letters.push("");
+			} else if (checkIfVowel(allWordData[i][j+1]) && lastAnalysed == "vowel" ) {
+				phons.push(allWordData[i][j+1]);
+				letters.push("");
+				lastAnalysed = "vowel";
+			} else if (!checkIfVowel(allWordData[i][j+1]) && lastAnalysed == "cons" ) {
+				phons.push(allWordData[i][j+1]);
+				letters.push("");
+				lastAnalysed = "cons";
+			}
+			
+		}
+		
+		phonComparisons.push(new comparison(phons, letters))
+		
+	}
+	
+	
+	console.log(phonComparisons);
+	
+	
 	
 	
 }
@@ -436,12 +501,11 @@ var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9) {
 	
 	for (var i = 0; i < allWordData.length; i++) {
 		
-		
 		for (var p = 0; p < allWordData[i].length; p++) {
 			
 			if (allWordData[i][p] == sym || allWordData[i][p] == sym2 || allWordData[i][p] == sym3 || allWordData[i][p] == sym4 || allWordData[i][p] == sym5 || allWordData[i][p] == sym6 || allWordData[i][p] == sym7 || allWordData[i][p] == sym8 || allWordData[i][p] == sym9) {
 				
-			$( "#word" + i ).css({"background-color": colors[colorcount]});
+				$( "#cluster" + i + "-" + (p-1) ).css({"background-color": colors[colorcount]});
 			
 			found = true;
 			
@@ -488,15 +552,6 @@ var nonRhoticScan = function(sym) {
 	//TODO: Do REVERSE
 	if (found) {colorcount++;};
 	
-}
-
-function objIsEmpty(obj) {
-    for(var prop in obj) {
-        if(obj.hasOwnProperty(prop))
-            return false;
-    }
-
-    return JSON.stringify(obj) === JSON.stringify({});
 }
 
 var vowelAfterScan = function (sym) {
@@ -724,15 +779,19 @@ var resetScans = function() {
 	
 	for (var i = 0; i < allWordData.length; i++) {
 		
-		$( "#word" + i ).css({"background-color": "transparent"});
+		for (var j = 0; j < allClusterData[i].length; j++) {
+		
+			$( "#cluster" + i + "-" + j ).css({"background-color": "transparent"});
+		
+		}
 		
 	}
 
 }
 
-var highlight = function(i) {
+var highlight = function(i, j) {
 	
-	$( "#word" + i ).css({"background-color": colors[colorcount]});
+	$( "#cluster" + i + "-" + j ).css({"background-color": colors[colorcount]});
 	
 }
 

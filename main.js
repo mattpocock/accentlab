@@ -126,12 +126,6 @@ var onPush = function() {
 			result = mellonToPhonetics(result);
 			
 			fullWordTranslations.push(result);
-			
-			// PRINTS TO PAGE
-			
-			var toInsert = $('<div class="word-anchor tooltip" onclick="highlight('+ i +')"id="word'+i+'">' + noTransWords[i] + '<span class="tooltiptext">'+ result +'</a>')
-				
-			$( "#output-txt" ).append(toInsert);
 				
 			}
 			
@@ -216,6 +210,24 @@ var onPush = function() {
 		
 	
 	console.log(allClusterData);
+	
+	// Prints to Page
+	
+	for (var i = 0; i < allWordData.length; i++) {
+		
+		var insideDiv = "";
+		
+		for (var j = 0; j < allClusterData[i].length; j++) {
+			
+			insideDiv += "<a id='cluster"+i+"-"+j+"'>" + allClusterData[i][j].chars + "</a>";
+			
+		}
+		
+		var toInsert = $('<div class="tooltip" onclick="highlight('+ i +')"id="word'+i+'">' + insideDiv + '<span class="tooltiptext">'+ fullWordTranslations[i] +'</div>');
+			
+		$( "#output-txt" ).append(toInsert);
+		
+	}
 	
 	
 }

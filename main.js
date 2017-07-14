@@ -319,6 +319,14 @@ var onPush = function() {
 	
 }
 
+var scanCustom = function() {
+	
+	var sym = $('#custom-txt').val().toUpperCase();
+	scanFor(sym);
+	
+	$('#custom-txt').val('');
+}
+
 var mellonToPhonetics = function(str) {
 	
 	var res = "";
@@ -585,6 +593,38 @@ var nonRhoticScan = function(sym) {
 			
 			
 			
+			}
+			
+		}
+		
+	}
+	
+	//TODO: Do REVERSE
+	if (found) {colorcount++;};
+	
+}
+
+var vowelAfterScan = function(sym) {
+	
+	var found = false;
+	
+	for (var i = 0; i < phonComparisons.length; i++) {
+		
+		for (var p = 0; p < phonComparisons[i].phons.length; p++) {
+			
+			for (var j = 0; j < phonComparisons[i].phons[j].length; j++) {
+			
+				if (phonComparisons[i].phons[p][j] == sym) {
+					
+					if (checkIfVowel(allWordData[i][p+1]) || checkIfVowel(allWordData[i][p+2])) {
+						console.log(allWordData[i][p+1]);
+						changeColour(i,p,colors[colorcount]);
+						found = true;
+						
+					}
+				
+				}
+				
 			}
 			
 		}

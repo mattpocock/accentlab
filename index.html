@@ -14,7 +14,7 @@
 </div>
 
 <div id="btns-div">
-	
+	<h2>Fricatives</h2>
 	<button class="sound-btn" onclick="scanFor('TH')">Unvoiced TH</button>
 	<button class="sound-btn" onclick="scanFor('DH')">Voiced TH</button>
 	<button class="sound-btn" onclick="scanFor('S')">'S' Sound</button>
@@ -25,14 +25,14 @@
 	<button class="sound-btn" onclick="scanFor('HH')">H Sound</button>
 	<button class="sound-btn" onclick="scanFor('SH')">Sh Sound</button>
 	<button class="sound-btn" onclick="scanFor('ZH')">Zh Sound</button>
-	<br>
+	<h2>Plosives</h2>
 	<button class="sound-btn" onclick="scanFor('P')">'P' Sound</button>
 	<button class="sound-btn" onclick="scanFor('B')">'B' Sound</button>
 	<button class="sound-btn" onclick="scanFor('T')">T Sound</button>
 	<button class="sound-btn" onclick="scanFor('D')">D Sound</button>
 	<button class="sound-btn" onclick="scanFor('K')">K Sound</button>
 	<button class="sound-btn" onclick="scanFor('G')">G Sound</button>
-	<br>
+	<h2>Other</h2>
 	<button class="sound-btn" onclick="scanFor('CH')">CH Sound</button>
 	<button class="sound-btn" onclick="scanFor('JH')">J Sound</button>
 	<br>
@@ -49,13 +49,17 @@
 	<br>
 	<button class="sound-btn" onclick="scanFor('Y')">Y Sound</button>
 	<button class="sound-btn" onclick="scanFor('W')">W Sound</button>
-	<br>
+	<h2>Vowels</h2>
 	<button class="sound-btn" onclick="scanFor('IH')">Short IH</button>
 	<button class="sound-btn" onclick="scanFor('UH')">Short Ooh</button>
 	<button class="sound-btn" onclick="scanFor('IY1', 'IY2')">Long EE</button>
 	<button class="sound-btn" onclick="scanFor('UW')">Long OO</button>
 	<button class="sound-btn" onclick="scanFor('ER0','AH0')">Schwa</button>
 	<button class="sound-btn" onclick="scanFor('AE','AA','AY','AW')">Drop The Jaw</button>
+	<br>
+	<input type="text" id="custom-txt"></input>
+	<button class="sound-btn" onclick="scanCustom()">Custom</button>
+	<a href="http://www.speech.cs.cmu.edu/cgi-bin/cmudict" target="_blank">CMU Dictionary</a>
 
 </div>
 

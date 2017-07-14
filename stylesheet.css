@@ -51,6 +51,11 @@
 
 .tooltip {
     position: relative;
+	
+}
+
+.cluster {
+	cursor: pointer;
 }
 
 .tooltip .tooltiptext {

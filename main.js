@@ -69,18 +69,17 @@ var onPush = function() {
 	var out = document.getElementById("output-txt"); // Clears output text
 	out.innerHTML = "";
 	
-	var paraCounter = 0;
 	
 	for (var i = 0; i < inputArr.length; i++) {
 		
 		
-		if (i == paragraphs[paraCounter]) {
+		/*if (i == paragraphs[paraCounter]) {
 			
 			$( "#output-txt" ).append("<br><br><a></a>");
 			allWordData.push("");
 			paraCounter++;
 			
-		} else {
+		} else { */
 		
 			// CLEANS UP THE WORD READY FOR SEARCHING
 			
@@ -125,8 +124,6 @@ var onPush = function() {
 			result = mellonToPhonetics(result);
 			
 			fullWordTranslations.push(result);
-				
-			}
 			
 	
 	}
@@ -141,7 +138,7 @@ var onPush = function() {
 	}
 	
 	
-	for (var i = 0; i < noTransWords.length; i++) {
+	for (var i = 0; i < noTransWords.length; i++) { // Works out Letters for Clusters
 		
 		var toInput = [];
 		var prevType = "start";
@@ -209,13 +206,27 @@ var onPush = function() {
 	
 	// Prints to Page
 	
+	var paraCounter = 0;
+	
+	
+	
 	for (var i = 0; i < allWordData.length; i++) {
+		
+		if (i == paragraphs[paraCounter]+1) {
+			
+			$( "#output-txt" ).append("<br><br><a></a>");
+			paraCounter++;
+			i--;
+			
+		} else {
+		
+		$( "#output-txt" ).append(toInsert);
 		
 		var insideDiv = "";
 		
 		for (var j = 0; j < allClusterData[i].length; j++) {
 			
-			insideDiv += "<a id='cluster"+i+"-"+j+"' onclick='highlight("+ i + "," + j +")'>" + allClusterData[i][j].chars + "</a>";
+			insideDiv += "<a class='cluster' id='cluster"+i+"-"+j+"' onclick='highlight("+ i + "," + j +")'>" + allClusterData[i][j].chars + "</a>";
 			
 		}
 		
@@ -223,19 +234,9 @@ var onPush = function() {
 			
 		$( "#output-txt" ).append(toInsert);
 		
+		}
 	}
 	
-	var checkIfMatch = function (clus, phon) {
-		
-		if (clus == "vowel" && checkIfVowel(phon)) {
-			return true;
-		} else if (clus == "cons" && !checkIfVowel(phon)) {
-			return true;
-		} else {
-			return false;
-		}
-		
-	}
 	
 	phonComparisons = [];
 	
@@ -288,7 +289,6 @@ var onPush = function() {
 				tempArr.push(cleanUndefined(allWordData[i][phonsCount]));
 				phonsCount++;
 				while (checkIfVowel(allWordData[i][phonsCount]) && phonsCount < allWordData[i].length) {
-					//console.log("firing!");
 					tempArr.push(cleanUndefined(allWordData[i][phonsCount]));
 					phonsCount++;
 					
@@ -309,7 +309,7 @@ var onPush = function() {
 		
 	}
 	
-	console.log(phonComparisons);
+	
 	
 	//TODO: Work on detecting silent vowels
 	
@@ -571,7 +571,7 @@ var nonRhoticScan = function(sym) {
 			
 			if (phonComparisons[i].phons[p] == sym || phonComparisons[i].phons[p] == "ER0" || phonComparisons[i].phons[p] == "ER1" || phonComparisons[i].phons[p] == "ER2") {
 				
-				// console.log("In " + phonComparisons[i].phons + ", " + phonComparisons[i].phons[p+1] + " comes after the R.");
+				
 				
 			if (p == phonComparisons[i].phons.length-1) { // Checks if at end
 				changeColour(i,p,colors[colorcount]);

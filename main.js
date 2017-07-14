@@ -90,7 +90,7 @@ var onPush = function() {
 				
 				var l = inputArr[i].charAt(s);
 				
-				if (l == "\"" || l == "\'" || l == "\n" || l == "\r\n" || l == "‚Äú" || l == "\‚Äú" || l == "\‚Äù" || l == "\‚Äô" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")") {
+				if (l == "\"" || l == "\'" || l == "\n" || l == "\r\n" || l == "ì" || l == "\ì" || l == "\î" || l == "\í" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")") {
 					
 				} else {
 					cleanedResult += l;
@@ -167,7 +167,7 @@ var onPush = function() {
 					prevType = "vowel";
 				}
 				
-			} else if (l == "\"" || l == "\'" || l == "\n" || l == "\r\n" || l == "‚Äú" || l == "\‚Äú" || l == "\‚Äù" || l == "\‚Äô" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")"){
+			} else if (l == "\"" || l == "\'" || l == "\n" || l == "\r\n" || l == "ì" || l == "\ì" || l == "\î" || l == "\í" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")"){
 				if (prevType == "start") {
 					type = "punc";
 					chars = l;
@@ -246,54 +246,73 @@ var onPush = function() {
 	
 	// Compare allClusterData to allWordData
 	
-	for (var i = 0; i < allClusterData.length; i++) {
+	for (var i = 0; i < allClusterData.length; i++) { // Repeats Each Word
 		
 		var phons = [];
 		var letters = [];
-		var lastAnalysed = "";
+		var lastAnalysed = "start";
+		var phonsCount = 1; // It's '1' because of a weird glitch in the AllWordData
+		var tempArr = [];
 		
-		//TODO: Change this so that it uses each cluster as a marker, and puts in the phonetics based on the type.
-		//      So if it's a consonant, it'll find all the consonants in the cluster and put them in an array.
+		for (var j = 0; j < allClusterData[i].length; j++) { // Repeats Each Cluster
 		
-		for (var j = 0; j < allClusterData[i].length && j < allWordData[i].length-1; j++) { 
+			var letterType = allClusterData[i][j].type;
 			
-			if (allClusterData[i][j].type == "punc") {
+			
+			if (letterType == "punc") {
 				
-				phons.push("");
-				letters.push("");
+				tempArr.push("");
+				lastAnalysed = "punc";
+				phons.push(tempArr);
+				tempArr = [];
 				
-			} else if (checkIfMatch(allClusterData[i][j].type, allWordData[i][j+1])) { // Check if they match type. If they do, put both in.
 				
-				phons.push(allWordData[i][j+1]);
-				letters.push(allClusterData[i][j].chars);
-				lastAnalysed = allClusterData[i][j].type;
+			} else if (letterType == "cons") {
 				
-			} else if (allClusterData[i][j].type == "cons" && lastAnalysed == "cons") { // We know they don't match type, so the other one must be a consonant.
+				tempArr.push(cleanUndefined(allWordData[i][phonsCount]));
+				phonsCount++;
+				while (!checkIfVowel(allWordData[i][phonsCount]) && phonsCount < allWordData[i].length) {
+					tempArr.push(cleanUndefined(allWordData[i][phonsCount]));
+					phonsCount++;
+					
+				}
 				
-				phons.push("");
-				letters.push(allClusterData[i][j].chars);
+				phons.push(tempArr);
+				tempArr = [];
 				
-			} else if (allClusterData[i][j].type == "vowel" && lastAnalysed == "vowel") {
-				phons.push(allClusterData[i][j].chars);
-				letters.push("");
-			} else if (checkIfVowel(allWordData[i][j+1]) && lastAnalysed == "vowel" ) {
-				phons.push(allWordData[i][j+1]);
-				letters.push("");
-				lastAnalysed = "vowel";
-			} else if (!checkIfVowel(allWordData[i][j+1]) && lastAnalysed == "cons" ) {
-				phons.push(allWordData[i][j+1]);
-				letters.push("");
+				
 				lastAnalysed = "cons";
+				
+			} else if (letterType == "vowel") {
+				
+				tempArr.push(cleanUndefined(allWordData[i][phonsCount]));
+				phonsCount++;
+				while (checkIfVowel(allWordData[i][phonsCount]) && phonsCount < allWordData[i].length) {
+					//console.log("firing!");
+					tempArr.push(cleanUndefined(allWordData[i][phonsCount]));
+					phonsCount++;
+					
+				}
+				
+				phons.push(tempArr);
+				tempArr = [];
+				
 			}
+			
+			letters.push(allClusterData[i][j]);
 			
 		}
 		
-		phonComparisons.push(new comparison(phons, letters))
+		phonComparisons.push(new comparison(phons, letters));
+		
+		
 		
 	}
 	
-	
 	console.log(phonComparisons);
+	
+	//TODO: Work on detecting silent vowels
+	
 	
 	
 	
@@ -343,6 +362,14 @@ var mellonToPhonetics = function(str) {
 	
 	return "/" + res + "/";
 	
+}
+
+var cleanUndefined = function (input) {
+	if (input == null) {
+		return "";
+	} else {
+		return input;
+	}
 }
 
 var convert = function(sym) {
@@ -499,18 +526,28 @@ var convert = function(sym) {
 	return res;
 }
 
+var changeColour = function(i,p,color) {
+	$( "#cluster" + i + "-" + p ).css({"background-color": color});
+}
+
 var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9) {
 	var found = false;
 	
-	for (var i = 0; i < allWordData.length; i++) {
+	for (var i = 0; i < phonComparisons.length; i++) {
 		
-		for (var p = 0; p < allWordData[i].length; p++) {
+		for (var p = 0; p < phonComparisons[i].phons.length; p++) {
 			
-			if (allWordData[i][p] == sym || allWordData[i][p] == sym2 || allWordData[i][p] == sym3 || allWordData[i][p] == sym4 || allWordData[i][p] == sym5 || allWordData[i][p] == sym6 || allWordData[i][p] == sym7 || allWordData[i][p] == sym8 || allWordData[i][p] == sym9) {
+			for (var q = 0; q < phonComparisons[i].phons[p].length; q++) {
 				
-				$( "#cluster" + i + "-" + (p-1) ).css({"background-color": colors[colorcount]});
+				
 			
-			found = true;
+				if (phonComparisons[i].phons[p][q] == sym || phonComparisons[i].phons[p][q] == sym2 || phonComparisons[i].phons[p][q] == sym3 || phonComparisons[i].phons[p][q] == sym4 || phonComparisons[i].phons[p][q] == sym5 || phonComparisons[i].phons[p][q] == sym6 || phonComparisons[i].phons[p][q] == sym7 || phonComparisons[i].phons[p][q] == sym8 || phonComparisons[i].phons[p][q] == sym9) {
+					
+					changeColour(i,p,colors[colorcount]);
+				
+				found = true;
+				
+				}
 			
 			}
 			
@@ -521,25 +558,27 @@ var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9) {
 	//TODO: Do REVERSE
 	if (found) {colorcount++;};
 }
+
+
 
 var nonRhoticScan = function(sym) {
 	
 	var found = false;
 	
-	for (var i = 0; i < allWordData.length; i++) {
+	for (var i = 0; i < phonComparisons.length; i++) {
 		
-		for (var p = 0; p < allWordData[i].length; p++) {
+		for (var p = 0; p < phonComparisons[i].phons.length; p++) {
 			
-			if (allWordData[i][p] == sym || allWordData[i][p] == "ER0" || allWordData[i][p] == "ER1" || allWordData[i][p] == "ER2") {
+			if (phonComparisons[i].phons[p] == sym || phonComparisons[i].phons[p] == "ER0" || phonComparisons[i].phons[p] == "ER1" || phonComparisons[i].phons[p] == "ER2") {
 				
-				// console.log("In " + allWordData[i] + ", " + allWordData[i][p+1] + " comes after the R.");
+				// console.log("In " + phonComparisons[i].phons + ", " + phonComparisons[i].phons[p+1] + " comes after the R.");
 				
-			if (p == allWordData[i].length-1) { // Checks if at end
-				$( "#word" + i ).css({"background-color": colors[colorcount]});
+			if (p == phonComparisons[i].phons.length-1) { // Checks if at end
+				changeColour(i,p,colors[colorcount]);
 				found = true;
-			} else if (!checkIfVowel(allWordData[i][p+1])) {
+			} else if (phonComparisons[i].letters[p+1].type != "vowel") {
 				
-				$( "#word" + i ).css({"background-color": colors[colorcount]});
+				changeColour(i,p,colors[colorcount]);
 				found = true;
 				
 			}
@@ -554,35 +593,6 @@ var nonRhoticScan = function(sym) {
 	
 	//TODO: Do REVERSE
 	if (found) {colorcount++;};
-	
-}
-
-var vowelAfterScan = function (sym) {
-	
-	var found = false;
-	
-	for (var i = 0; i < allWordData.length; i++) {
-		
-		for (var p = 0; p < allWordData[i].length; p++) {
-			
-			if (allWordData[i][p] == sym) {
-				
-			if (checkIfVowel(allWordData[i][p+1])) {
-				$( "#word" + i ).css({"background-color": colors[colorcount]});
-				found = true;
-				
-			}
-			
-			
-			
-			}
-			
-		}
-		
-	}
-	
-	if (found) {colorcount++;};
-	
 	
 }
 
@@ -590,20 +600,20 @@ var darkLScan = function(sym) {
 	
 	var found = false;
 	
-	for (var i = 0; i < allWordData.length; i++) {
+	for (var i = 0; i < phonComparisons.length; i++) {
 		
-		for (var p = 0; p < allWordData[i].length; p++) {
+		for (var p = 0; p < phonComparisons[i].phons.length; p++) {
 			
-			if (allWordData[i][p] == sym) {
+			if (phonComparisons[i].phons[p] == sym) {
 				
-				// console.log("In " + allWordData[i] + ", " + allWordData[i][p+1] + " comes after the R.");
+
 				
-			if (p == allWordData[i].length-1) { // Checks if at end
-				$( "#word" + i ).css({"background-color": colors[colorcount]});
+			if (p == phonComparisons[i].phons.length-1) { // Checks if at end
+				changeColour(i,p,colors[colorcount]);
 				found = true;
-			} else if (!checkIfVowel(allWordData[i][p+1])) {
+			} else if (phonComparisons[i].letters[p+1].type != "vowel") {
 				
-				$( "#word" + i ).css({"background-color": colors[colorcount]});
+				changeColour(i,p,colors[colorcount]);
 				found = true;
 				
 			}

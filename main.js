@@ -1,6 +1,10 @@
 var cmellontxt;
 
 var allWordData = [];
+var noTransWords = [];
+var fullWordTranslations = [];
+var phonComparisons = [];
+var allClusterData = [];
 var colors = ["#ffea74", "#d374ff", "#ff749b","#a0ff74", "#9074ff", "#74c7ff", "#ffa778"];
 var colorcount = 0;
 var paragraphs = [];
@@ -10,6 +14,7 @@ var onPush = function() {
 	allWordData = [];
 	colorcount = 0;
 	paragraphs = [];
+	fullWordTranslations = [];
 	
 	var input = document.getElementById("input-txt").value;
 	
@@ -56,6 +61,10 @@ var onPush = function() {
 			
 	// BY THIS TIME, INPUTARR CONTAINS ALL WORDS AND ALL PUNCTUATION
 	
+	noTransWords = [];
+	
+	noTransWords = inputArr;
+	
 	
 	var out = document.getElementById("output-txt"); // Clears output text
 	out.innerHTML = "";
@@ -81,7 +90,7 @@ var onPush = function() {
 				
 				var l = inputArr[i].charAt(s);
 				
-				if (l == "\"" || l == "\'" || l == "\n" || l == "\r\n" || l == "‚Äú" || l == "\‚Äú" || l == "\‚Äù" || l == "\‚Äô" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")") {
+				if (l == "\"" || l == "\'" || l == "\n" || l == "\r\n" || l == "ì" || l == "\ì" || l == "\î" || l == "\í" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")") {
 					
 				} else {
 					cleanedResult += l;
@@ -115,22 +124,198 @@ var onPush = function() {
 			
 			result = mellonToPhonetics(result);
 			
-			
-			
-			// PRINTS TO PAGE
-			
-			var toInsert = $('<a class="word-anchor tooltip" onclick="highlight('+ i +')"id="word'+i+'">' + inputArr[i] + '<span class="tooltiptext">'+ result +'</a>')
-				
-			$( "#output-txt" ).append(toInsert);
+			fullWordTranslations.push(result);
 				
 			}
 			
 	
 	}
-		
-	// TODO: Put the Punctuation Back In
 	
-	console.log(allWordData);
+	// Clusters
+	
+	allClusterData = [];
+	
+	function cluster (type, chars) {
+    this.type = type;
+    this.chars = chars;
+	}
+	
+	
+	for (var i = 0; i < noTransWords.length; i++) {
+		
+		var toInput = [];
+		var prevType = "start";
+		var chars = "";
+		var type = "";
+		
+		for (var j = 0; j < noTransWords[i].length; j++) {
+			
+			var l = noTransWords[i][j];
+			
+			if (l == "a" || l == "e" || l == "i" || l == "o" || l == "u" || l == "A" || l == "E" || l == "I" || l == "O" || l == "U") {
+				
+				if (prevType == "start") {
+					type = "vowel";
+					chars = l;
+					prevType = "vowel";
+				} else if (prevType == "vowel") {
+					chars += l;
+				} else {
+					toInput.push(new cluster(type, chars));
+					type = "vowel";
+					chars = l;
+					prevType = "vowel";
+				}
+				
+			} else if (l == "\"" || l == "\'" || l == "\n" || l == "\r\n" || l == "ì" || l == "\ì" || l == "\î" || l == "\í" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")"){
+				if (prevType == "start") {
+					type = "punc";
+					chars = l;
+					prevType = "punc";
+				} else if (prevType == "punc") {
+					chars += l;
+				} else {
+					toInput.push(new cluster(type, chars));
+					type = "punc";
+					chars = l;
+					prevType = "punc";
+				}
+			} else {
+				if (prevType == "start") {
+					type = "cons";
+					chars = l;
+					prevType = "cons";
+				} else if (prevType == "cons") {
+					chars += l;
+				} else {
+					toInput.push(new cluster(type, chars));
+					type = "cons";
+					chars = l;
+					prevType = "cons";
+				}
+			}
+			
+			if (j == noTransWords[i].length - 1) {
+				toInput.push(new cluster(type, chars));
+			}
+			
+			
+			
+		}
+		
+		allClusterData.push(toInput);
+		
+	}
+	
+	// Prints to Page
+	
+	for (var i = 0; i < allWordData.length; i++) {
+		
+		var insideDiv = "";
+		
+		for (var j = 0; j < allClusterData[i].length; j++) {
+			
+			insideDiv += "<a id='cluster"+i+"-"+j+"' onclick='highlight("+ i + "," + j +")'>" + allClusterData[i][j].chars + "</a>";
+			
+		}
+		
+		var toInsert = $('<span class="tooltip" "id="word'+i+'">' + insideDiv + '<span class="tooltiptext">'+ fullWordTranslations[i] +'</span>');
+			
+		$( "#output-txt" ).append(toInsert);
+		
+	}
+	
+	var checkIfMatch = function (clus, phon) {
+		
+		if (clus == "vowel" && checkIfVowel(phon)) {
+			return true;
+		} else if (clus == "cons" && !checkIfVowel(phon)) {
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
+	phonComparisons = [];
+	
+	function comparison (phons, letters) {
+    this.phons = phons;
+    this.letters = letters;
+	}
+	
+	// Compare allClusterData to allWordData
+	
+	for (var i = 0; i < allClusterData.length; i++) { // Repeats Each Word
+		
+		var phons = [];
+		var letters = [];
+		var lastAnalysed = "start";
+		var phonsCount = 1; // It's '1' because of a weird glitch in the AllWordData
+		var tempArr = [];
+		
+		for (var j = 0; j < allClusterData[i].length; j++) { // Repeats Each Cluster
+		
+			var letterType = allClusterData[i][j].type;
+			
+			
+			if (letterType == "punc") {
+				
+				tempArr.push("");
+				lastAnalysed = "punc";
+				phons.push(tempArr);
+				tempArr = [];
+				
+				
+			} else if (letterType == "cons") {
+				
+				tempArr.push(cleanUndefined(allWordData[i][phonsCount]));
+				phonsCount++;
+				while (!checkIfVowel(allWordData[i][phonsCount]) && phonsCount < allWordData[i].length) {
+					tempArr.push(cleanUndefined(allWordData[i][phonsCount]));
+					phonsCount++;
+					
+				}
+				
+				phons.push(tempArr);
+				tempArr = [];
+				
+				
+				lastAnalysed = "cons";
+				
+			} else if (letterType == "vowel") {
+				
+				tempArr.push(cleanUndefined(allWordData[i][phonsCount]));
+				phonsCount++;
+				while (checkIfVowel(allWordData[i][phonsCount]) && phonsCount < allWordData[i].length) {
+					//console.log("firing!");
+					tempArr.push(cleanUndefined(allWordData[i][phonsCount]));
+					phonsCount++;
+					
+				}
+				
+				phons.push(tempArr);
+				tempArr = [];
+				
+			}
+			
+			letters.push(allClusterData[i][j]);
+			
+		}
+		
+		phonComparisons.push(new comparison(phons, letters));
+		
+		
+		
+	}
+	
+	console.log(phonComparisons);
+	
+	//TODO: Work on detecting silent vowels
+	
+	
+	
+	
 	
 }
 
@@ -177,6 +362,14 @@ var mellonToPhonetics = function(str) {
 	
 	return "/" + res + "/";
 	
+}
+
+var cleanUndefined = function (input) {
+	if (input == null) {
+		return "";
+	} else {
+		return input;
+	}
 }
 
 var convert = function(sym) {
@@ -333,19 +526,28 @@ var convert = function(sym) {
 	return res;
 }
 
+var changeColour = function(i,p,color) {
+	$( "#cluster" + i + "-" + p ).css({"background-color": color});
+}
+
 var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9) {
 	var found = false;
 	
-	for (var i = 0; i < allWordData.length; i++) {
+	for (var i = 0; i < phonComparisons.length; i++) {
 		
-		
-		for (var p = 0; p < allWordData[i].length; p++) {
+		for (var p = 0; p < phonComparisons[i].phons.length; p++) {
 			
-			if (allWordData[i][p] == sym || allWordData[i][p] == sym2 || allWordData[i][p] == sym3 || allWordData[i][p] == sym4 || allWordData[i][p] == sym5 || allWordData[i][p] == sym6 || allWordData[i][p] == sym7 || allWordData[i][p] == sym8 || allWordData[i][p] == sym9) {
+			for (var q = 0; q < phonComparisons[i].phons[p].length; q++) {
 				
-			$( "#word" + i ).css({"background-color": colors[colorcount]});
+				
 			
-			found = true;
+				if (phonComparisons[i].phons[p][q] == sym || phonComparisons[i].phons[p][q] == sym2 || phonComparisons[i].phons[p][q] == sym3 || phonComparisons[i].phons[p][q] == sym4 || phonComparisons[i].phons[p][q] == sym5 || phonComparisons[i].phons[p][q] == sym6 || phonComparisons[i].phons[p][q] == sym7 || phonComparisons[i].phons[p][q] == sym8 || phonComparisons[i].phons[p][q] == sym9) {
+					
+					changeColour(i,p,colors[colorcount]);
+				
+				found = true;
+				
+				}
 			
 			}
 			
@@ -356,25 +558,27 @@ var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9) {
 	//TODO: Do REVERSE
 	if (found) {colorcount++;};
 }
+
+
 
 var nonRhoticScan = function(sym) {
 	
 	var found = false;
 	
-	for (var i = 0; i < allWordData.length; i++) {
+	for (var i = 0; i < phonComparisons.length; i++) {
 		
-		for (var p = 0; p < allWordData[i].length; p++) {
+		for (var p = 0; p < phonComparisons[i].phons.length; p++) {
 			
-			if (allWordData[i][p] == sym || allWordData[i][p] == "ER0" || allWordData[i][p] == "ER1" || allWordData[i][p] == "ER2") {
+			if (phonComparisons[i].phons[p] == sym || phonComparisons[i].phons[p] == "ER0" || phonComparisons[i].phons[p] == "ER1" || phonComparisons[i].phons[p] == "ER2") {
 				
-				// console.log("In " + allWordData[i] + ", " + allWordData[i][p+1] + " comes after the R.");
+				// console.log("In " + phonComparisons[i].phons + ", " + phonComparisons[i].phons[p+1] + " comes after the R.");
 				
-			if (p == allWordData[i].length-1) { // Checks if at end
-				$( "#word" + i ).css({"background-color": colors[colorcount]});
+			if (p == phonComparisons[i].phons.length-1) { // Checks if at end
+				changeColour(i,p,colors[colorcount]);
 				found = true;
-			} else if (!checkIfVowel(allWordData[i][p+1])) {
+			} else if (phonComparisons[i].letters[p+1].type != "vowel") {
 				
-				$( "#word" + i ).css({"background-color": colors[colorcount]});
+				changeColour(i,p,colors[colorcount]);
 				found = true;
 				
 			}
@@ -389,35 +593,6 @@ var nonRhoticScan = function(sym) {
 	
 	//TODO: Do REVERSE
 	if (found) {colorcount++;};
-	
-}
-
-var vowelAfterScan = function (sym) {
-	
-	var found = false;
-	
-	for (var i = 0; i < allWordData.length; i++) {
-		
-		for (var p = 0; p < allWordData[i].length; p++) {
-			
-			if (allWordData[i][p] == sym) {
-				
-			if (checkIfVowel(allWordData[i][p+1])) {
-				$( "#word" + i ).css({"background-color": colors[colorcount]});
-				found = true;
-				
-			}
-			
-			
-			
-			}
-			
-		}
-		
-	}
-	
-	if (found) {colorcount++;};
-	
 	
 }
 
@@ -425,20 +600,20 @@ var darkLScan = function(sym) {
 	
 	var found = false;
 	
-	for (var i = 0; i < allWordData.length; i++) {
+	for (var i = 0; i < phonComparisons.length; i++) {
 		
-		for (var p = 0; p < allWordData[i].length; p++) {
+		for (var p = 0; p < phonComparisons[i].phons.length; p++) {
 			
-			if (allWordData[i][p] == sym) {
+			if (phonComparisons[i].phons[p] == sym) {
 				
-				// console.log("In " + allWordData[i] + ", " + allWordData[i][p+1] + " comes after the R.");
+
 				
-			if (p == allWordData[i].length-1) { // Checks if at end
-				$( "#word" + i ).css({"background-color": colors[colorcount]});
+			if (p == phonComparisons[i].phons.length-1) { // Checks if at end
+				changeColour(i,p,colors[colorcount]);
 				found = true;
-			} else if (!checkIfVowel(allWordData[i][p+1])) {
+			} else if (phonComparisons[i].letters[p+1].type != "vowel") {
 				
-				$( "#word" + i ).css({"background-color": colors[colorcount]});
+				changeColour(i,p,colors[colorcount]);
 				found = true;
 				
 			}
@@ -617,15 +792,19 @@ var resetScans = function() {
 	
 	for (var i = 0; i < allWordData.length; i++) {
 		
-		$( "#word" + i ).css({"background-color": "transparent"});
+		for (var j = 0; j < allClusterData[i].length; j++) {
+		
+			$( "#cluster" + i + "-" + j ).css({"background-color": "transparent"});
+		
+		}
 		
 	}
 
 }
 
-var highlight = function(i) {
+var highlight = function(i, j) {
 	
-	$( "#word" + i ).css({"background-color": colors[colorcount]});
+	$( "#cluster" + i + "-" + j ).css({"background-color": colors[colorcount]});
 	
 }
 

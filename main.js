@@ -36,7 +36,7 @@ var onPush = function() {
 				word = "";
 			}
 			
-		} else if (l == "\n") {
+		} else if (l == "\\n") {
 			
 			if (word != "") {
 			
@@ -538,7 +538,7 @@ var changeColour = function(i,p,color) {
 	$( "#cluster" + i + "-" + p ).css({"background-color": color});
 }
 
-var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9) {
+var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9, sym10) {
 	var found = false;
 	
 	for (var i = 0; i < phonComparisons.length; i++) {
@@ -549,7 +549,7 @@ var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9) {
 				
 				
 			
-				if (phonComparisons[i].phons[p][q] == sym || phonComparisons[i].phons[p][q] == sym2 || phonComparisons[i].phons[p][q] == sym3 || phonComparisons[i].phons[p][q] == sym4 || phonComparisons[i].phons[p][q] == sym5 || phonComparisons[i].phons[p][q] == sym6 || phonComparisons[i].phons[p][q] == sym7 || phonComparisons[i].phons[p][q] == sym8 || phonComparisons[i].phons[p][q] == sym9) {
+				if (phonComparisons[i].phons[p][q] == sym || phonComparisons[i].phons[p][q] == sym2 || phonComparisons[i].phons[p][q] == sym3 || phonComparisons[i].phons[p][q] == sym4 || phonComparisons[i].phons[p][q] == sym5 || phonComparisons[i].phons[p][q] == sym6 || phonComparisons[i].phons[p][q] == sym7 || phonComparisons[i].phons[p][q] == sym8 || phonComparisons[i].phons[p][q] == sym9 || phonComparisons[i].phons[p][q] == sym10) {
 					
 					changeColour(i,p,colors[colorcount]);
 				

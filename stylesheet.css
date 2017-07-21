@@ -47,7 +47,6 @@
 	width: 700px;
 	margin-left: auto;
 	margin-right: auto;
-	z-index: 1;
 }
 
 /* Pop-Up */
@@ -60,7 +59,7 @@
 	padding: 0px 10px 0px 10px;
 	min-width: 130px;
 	margin: 0px;
-    visibility: hidden;
+    visibility: gone;
 	opacity: 0;
     transition: opacity 0.4s;
 	z-index: 999999;
@@ -70,13 +69,12 @@
 }
 
 .lowlight {
-	opacity: 0.5;
+	opacity: 0.6;
 }
 
 
-.tooltip:hover .popup {
-    visibility: visible;
-    opacity: 1;
+.cluster:hover {
+    text-decoration: underline;
 }
 
 /* Tooltip */
@@ -88,7 +86,7 @@
 
 .cluster {
 	cursor: pointer;
-	z-index: 1;
 	position: relative;
+	display: inline;
 }
 

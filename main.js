@@ -204,41 +204,6 @@ var onPush = function() {
 		
 	}
 	
-	// Prints to Page
-	
-	var paraCounter = 0;
-	
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	for (var i = 0; i < allWordData.length; i++) {
-		
-		if (i == paragraphs[paraCounter]+1) {
-			
-			$( "#output-txt" ).append("<br><a></a>");
-			paraCounter++;
-			i--;
-			
-		} else {
-		
-		$( "#output-txt" ).append(toInsert);
-		
-		var insideDiv = "";
-		
-		for (var j = 0; j < allClusterData[i].length; j++) { // Loops over all of the clusters to add
-			
-			insideDiv += "<a class='cluster' id='cluster"+i+"-"+j+"' onclick='highlight("+ i + "," + j +")'>" + allClusterData[i][j].chars + "</a>";
-			
-		}
-		
-		var toInsert = $('<span class="tooltip" "id="word'+i+'"><div class="popup"><span class="lowlight">'+ noTransWords[i] + "</span> - " + fullWordTranslations[i] +'</div>' + insideDiv + '</span>');
-			
-		$( "#output-txt" ).append(toInsert);
-		
-		}
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	
 	phonComparisons = [];
 	
@@ -310,6 +275,58 @@ var onPush = function() {
 		
 		
 	}
+	
+	
+	
+	// Prints to Page
+	
+	var paraCounter = 0;
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	for (var i = 0; i < allWordData.length; i++) {
+		
+		if (i == paragraphs[paraCounter]+1) {
+			
+			$( "#output-txt" ).append("<br><a></a>");
+			paraCounter++;
+			i--;
+			
+		} else {
+		
+		$( "#output-txt" ).append(toInsert);
+		
+		var insideDiv = "";
+		
+		for (var j = 0; j < allClusterData[i].length; j++) { // Loops over all of the clusters to add
+		
+			var phonsToAdd = "";
+			var found = false;
+			
+			for (var k = 0; k < phonComparisons[i].phons[j].length; k++) {phonsToAdd+= convert(phonComparisons[i].phons[j][k])};
+			
+			if (phonsToAdd == "" && !found) {
+				phonsToAdd = "not found";
+			} else if (phonsToAdd == ""){
+				phonsToAdd = "silent";
+			}
+		
+			
+			insideDiv += '<div class="cluster" onClick="popUp('+i+','+j+');" id="cluster'+i+'-'+j+'" onclick="highlight('+ i + ',' + j +')"><div class="popup" onmouseleave="popDown('+i+','+j+');" id="popup'+i+'-'+j+'">'+ allClusterData[i][j].chars + ' - /' + phonsToAdd + '/</div>' + allClusterData[i][j].chars + '</div>';
+			
+		}
+		
+		var toInsert = $('<span id="word' + i + '">' + insideDiv + '</span>');
+			
+		$( "#output-txt" ).append(toInsert);
+		
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	console.log(allClusterData);
 	
 	
 	
@@ -881,6 +898,19 @@ var resetScans = function() {
 var highlight = function(i, j) {
 	
 	$( "#cluster" + i + "-" + j ).css({"background-color": colors[colorcount]});
+	
+}
+
+var popUp = function(i, j) {
+	
+	$( "#popup" + i + "-" + j ).css({"visibility": "visible", "opacity": 1});
+	console.log(phonComparisons[i].phons[j]);
+	
+}
+
+var popDown = function (i, j) {
+	
+	$( "#popup" + i + "-" + j ).css({"visibility": "invisible", "opacity": 0});
 	
 }
 

@@ -36,7 +36,7 @@ var onPush = function() {
 				word = "";
 			}
 			
-		} else if (l == "\\n") {
+		} else if (l == "\n") {
 			
 			if (word != "") {
 			
@@ -409,7 +409,7 @@ var convert = function(sym) {
         break;	
 		
 	case "AW":
-        res = "a&#650;";
+        res = "a&#650";
         break;
 	case "AY":
         res = "a&#618";
@@ -577,22 +577,24 @@ var nonRhoticScan = function(sym) {
 		
 		for (var p = 0; p < phonComparisons[i].phons.length; p++) {
 			
-			if (phonComparisons[i].phons[p] == sym || phonComparisons[i].phons[p] == "ER0" || phonComparisons[i].phons[p] == "ER1" || phonComparisons[i].phons[p] == "ER2") {
-				
-				
-				
-			if (p == phonComparisons[i].phons.length-1) { // Checks if at end
-				changeColour(i,p,colors[colorcount]);
-				found = true;
-			} else if (phonComparisons[i].letters[p+1].type != "vowel") {
-				
-				changeColour(i,p,colors[colorcount]);
-				found = true;
-				
-			}
+			for (var j = 0; j < phonComparisons[i].phons[p].length; j++) {
 			
-			
-			
+				if (phonComparisons[i].phons[p][j] == sym || phonComparisons[i].phons[p][j] == "ER0" || phonComparisons[i].phons[p][j] == "ER1" || phonComparisons[i].phons[p][j] == "ER2") {
+					
+					if (phonComparisons[i].phons[p][j+1] != null && !checkIfVowel(phonComparisons[i].phons[p][j+1])) { // Checks if next is a consonant
+						changeColour(i,p,colors[colorcount]);
+						console.log("1 - " + allWordData[i]);
+						found = true;
+					} else if (phonComparisons[i].phons[p+1] == "" && !checkIfVowel(phonComparisons[i].phons[p][j+1])) { // Checks if it's at the end, not perfect on 'y' endings
+						changeColour(i,p,colors[colorcount]);
+						console.log("2 - " + allWordData[i]);
+						found = true;
+						
+					}
+
+				
+				}
+				
 			}
 			
 		}
@@ -612,13 +614,44 @@ var vowelAfterScan = function(sym) {
 		
 		for (var p = 0; p < phonComparisons[i].phons.length; p++) {
 			
-			for (var j = 0; j < phonComparisons[i].phons[j].length; j++) {
-			
+			for (var j = 0; j < phonComparisons[i].phons[p].length; j++) {
+				
 				if (phonComparisons[i].phons[p][j] == sym) {
 					
-					if (checkIfVowel(allWordData[i][p+1]) || checkIfVowel(allWordData[i][p+2])) {
-						console.log(allWordData[i][p+1]);
+					if (checkIfVowel(phonComparisons[i].phons[p][j+1]) || (phonComparisons[i].phons[p][j+1] == null && checkIfVowel(phonComparisons[i].phons[p+1][0]))) { // Checks if there's a vowel in the next pocket of phonetics
 						changeColour(i,p,colors[colorcount]);
+						found = true;
+						
+					}
+				
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	//TODO: Do REVERSE
+	if (found) {colorcount++;};
+	
+}
+
+var atEndScan = function(sym) {
+	
+	var found = false;
+	
+	for (var i = 0; i < phonComparisons.length; i++) {
+		
+		for (var p = 0; p < phonComparisons[i].phons.length; p++) {
+			
+			for (var j = 0; j < phonComparisons[i].phons[p].length; j++) {
+				
+				if (phonComparisons[i].phons[p][j] == sym) {
+								
+					if (phonComparisons[i].phons[p][j+1] == null && phonComparisons[i].phons[p+1] == "") {
+						changeColour(i,phonComparisons[i].letters.length-2,colors[colorcount]);
+						console.log(allWordData[i] + ", Next In Cluster: " + phonComparisons[i].phons[p][j+1] + ", Next Cluster: " + phonComparisons[i].phons[p][j+1]);
 						found = true;
 						
 					}
@@ -643,30 +676,30 @@ var darkLScan = function(sym) {
 	for (var i = 0; i < phonComparisons.length; i++) {
 		
 		for (var p = 0; p < phonComparisons[i].phons.length; p++) {
-			
-			if (phonComparisons[i].phons[p] == sym) {
 				
-
+			for (var j = 0; j < phonComparisons[i].phons[p].length; j++) {
 				
-			if (p == phonComparisons[i].phons.length-1) { // Checks if at end
-				changeColour(i,p,colors[colorcount]);
-				found = true;
-			} else if (phonComparisons[i].letters[p+1].type != "vowel") {
+				if (phonComparisons[i].phons[p][j] == sym) {
+					
+					if (phonComparisons[i].phons[p][j+1] != null && !checkIfVowel(phonComparisons[i].phons[p][j+1])) { // Checks if next is a consonant
+						changeColour(i,p,colors[colorcount]);
+						console.log("1 - " + allWordData[i]);
+						found = true;
+					} else if (phonComparisons[i].phons[p+1] == "" && !checkIfVowel(phonComparisons[i].phons[p][j+1])) { // Checks if it's at the end, not perfect on 'y' endings
+						changeColour(i,p,colors[colorcount]);
+						console.log("2 - " + allWordData[i]);
+						found = true;
+						
+					}
 				
-				changeColour(i,p,colors[colorcount]);
-				found = true;
+				}
 				
 			}
-			
-			
-			
-			}
-			
+		
 		}
 		
 	}
 	
-	//TODO: Do REVERSE
 	if (found) {colorcount++;};
 	
 }
@@ -819,7 +852,10 @@ var checkIfVowel = function(sym) {
 	case "ZH":
         res = false;
         break;
-    default:
+	case null:
+		res = null;
+		break;
+	default:
         res = false;
 } 
 	return res;

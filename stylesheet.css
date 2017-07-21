@@ -22,6 +22,8 @@
 	font-size: 24px;
 	font-family: arial;
 	line-height: 40px;
+	z-index: 1;
+	position: relative;
 }
 
 .sound-btn {
@@ -45,50 +47,48 @@
 	width: 700px;
 	margin-left: auto;
 	margin-right: auto;
+	z-index: 1;
+}
+
+/* Pop-Up */
+
+.popup {
+    position:absolute;
+    top: -9px;
+    left:-12px;
+    background: white;
+	padding: 0px 10px 0px 10px;
+	min-width: 130px;
+	margin: 0px;
+    visibility: hidden;
+	opacity: 0;
+    transition: opacity 0.4s;
+	z-index: 999999;
+	border: #0375b4 solid 2px;
+	border-radius: 5px;
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+}
+
+.lowlight {
+	opacity: 0.5;
+}
+
+
+.tooltip:hover .popup {
+    visibility: visible;
+    opacity: 1;
 }
 
 /* Tooltip */
 
 .tooltip {
     position: relative;
-	
+	display: inline;
 }
 
 .cluster {
 	cursor: pointer;
+	z-index: 1;
+	position: relative;
 }
 
-.tooltip .tooltiptext {
-    visibility: hidden;
-    min-width: 120px;
-	font-size: 20px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 5px 5px 5px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -60px;
-    opacity: 0;
-    transition: opacity 0.2s;
-}
-
-.tooltip .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
-}
-
-.tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-}
-\ No newline at end of file

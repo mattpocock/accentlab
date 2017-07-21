@@ -208,13 +208,13 @@ var onPush = function() {
 	
 	var paraCounter = 0;
 	
-	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	for (var i = 0; i < allWordData.length; i++) {
 		
 		if (i == paragraphs[paraCounter]+1) {
 			
-			$( "#output-txt" ).append("<br><br><a></a>");
+			$( "#output-txt" ).append("<br><a></a>");
 			paraCounter++;
 			i--;
 			
@@ -224,18 +224,20 @@ var onPush = function() {
 		
 		var insideDiv = "";
 		
-		for (var j = 0; j < allClusterData[i].length; j++) {
+		for (var j = 0; j < allClusterData[i].length; j++) { // Loops over all of the clusters to add
 			
 			insideDiv += "<a class='cluster' id='cluster"+i+"-"+j+"' onclick='highlight("+ i + "," + j +")'>" + allClusterData[i][j].chars + "</a>";
 			
 		}
 		
-		var toInsert = $('<span class="tooltip" "id="word'+i+'">' + insideDiv + '<span class="tooltiptext">'+ fullWordTranslations[i] +'</span>');
+		var toInsert = $('<span class="tooltip" "id="word'+i+'"><div class="popup"><span class="lowlight">'+ noTransWords[i] + "</span> - " + fullWordTranslations[i] +'</div>' + insideDiv + '</span>');
 			
 		$( "#output-txt" ).append(toInsert);
 		
 		}
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	
 	phonComparisons = [];
@@ -567,8 +569,6 @@ var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9, sym1
 	if (found) {colorcount++;};
 }
 
-
-
 var nonRhoticScan = function(sym) {
 	
 	var found = false;
@@ -894,4 +894,6 @@ window.onload = function() {
 		}
 		
 		client.send();
+		
+		onPush();
 }

@@ -8,6 +8,7 @@ var allClusterData = [];
 var colors = ["#ffea74", "#d374ff", "#ff749b","#a0ff74", "#9074ff", "#74c7ff", "#ffa778"];
 var colorcount = 0;
 var paragraphs = [];
+var popped;
 
 var onPush = function() {
 	
@@ -16,7 +17,7 @@ var onPush = function() {
 	paragraphs = [];
 	fullWordTranslations = [];
 	
-	var input = document.getElementById("input-txt").value;
+	var input = "Phonetic Pangram: \n That beige fox quickly jumped in the air over each thin dog. Look out, I half shout, for he's foiled you again, creating chaos.\nText:\n" + document.getElementById("input-txt").value;
 	
 	var inputArr = [];
 	
@@ -149,7 +150,7 @@ var onPush = function() {
 			
 			var l = noTransWords[i][j];
 			
-			if (l == "a" || l == "e" || l == "i" || l == "o" || l == "u" || l == "A" || l == "E" || l == "I" || l == "O" || l == "U") {
+			if (l == "a" || l == "e" || l == "i" || l == "o" || l == "u" || l == "A" || l == "E" || l == "I" || l == "O" || l == "U" || l == "y" || l == "Y") {
 				
 				if (prevType == "start") {
 					type = "vowel";
@@ -164,7 +165,7 @@ var onPush = function() {
 					prevType = "vowel";
 				}
 				
-			} else if (l == "\"" || l == "\'" || l == "\n" || l == "\r\n" || l == "“" || l == "\“" || l == "\”" || l == "\’" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")"){
+			} else if (l == "/}" || l == "/{" || l == "/]" || l == "/[" || l == '"' || l == "\'" || l == "\n" || l == "\r\n" || l == "“" || l == "\“" || l == "\”" || l == "\’" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")"){
 				if (prevType == "start") {
 					type = "punc";
 					chars = l;
@@ -202,39 +203,6 @@ var onPush = function() {
 		
 		allClusterData.push(toInput);
 		
-	}
-	
-	// Prints to Page
-	
-	var paraCounter = 0;
-	
-	
-	
-	for (var i = 0; i < allWordData.length; i++) {
-		
-		if (i == paragraphs[paraCounter]+1) {
-			
-			$( "#output-txt" ).append("<br><br><a></a>");
-			paraCounter++;
-			i--;
-			
-		} else {
-		
-		$( "#output-txt" ).append(toInsert);
-		
-		var insideDiv = "";
-		
-		for (var j = 0; j < allClusterData[i].length; j++) {
-			
-			insideDiv += "<a class='cluster' id='cluster"+i+"-"+j+"' onclick='highlight("+ i + "," + j +")'>" + allClusterData[i][j].chars + "</a>";
-			
-		}
-		
-		var toInsert = $('<span class="tooltip" "id="word'+i+'">' + insideDiv + '<span class="tooltiptext">'+ fullWordTranslations[i] +'</span>');
-			
-		$( "#output-txt" ).append(toInsert);
-		
-		}
 	}
 	
 	
@@ -308,6 +276,62 @@ var onPush = function() {
 		
 		
 	}
+	
+	
+	
+	// Prints to Page
+	
+	var paraCounter = 0;
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	for (var i = 0; i < allWordData.length; i++) {
+		
+		if (i == paragraphs[paraCounter]+1) {
+			
+			$( "#output-txt" ).append("<br><br><a></a>");
+			paraCounter++;
+			i--;
+			
+		} else {
+		
+		$( "#output-txt" ).append(toInsert);
+		
+		var insideDiv = "";
+		
+		for (var j = 0; j < allClusterData[i].length; j++) { // Loops over all of the clusters to add
+		
+			var phonsToAdd = "";
+			var found = false;
+			
+			for (var k = 0; k < phonComparisons[i].phons[j].length; k++) {phonsToAdd+= convert(phonComparisons[i].phons[j][k])};
+			
+			if (phonsToAdd == "" && !found) {
+				phonsToAdd = "not found";
+			} else if (phonsToAdd == ""){
+				phonsToAdd = "silent";
+			}
+		
+			
+			var buttonFunc = "scanFor('"+ phonComparisons[i].phons[j][0] + "')";
+			var buttonFunc2 = "sayWord(phonComparisons["+i+"])";
+			var buttonFunc3 = "resetScans();";
+			
+			insideDiv += '<div class="cluster" onClick="popUp('+i+','+j+');"id="cluster'+i+'-'+j+'" onclick="highlight('+ i + ',' + j +')"><div class="popup" onmouseleave="popDown('+i+','+j+');" id="popup'+i+'-'+j+'">'+ allClusterData[i][j].chars + ' - /' + phonsToAdd + '/<br><button class="sound-btn" onclick='+ buttonFunc +'>Find All</button><button class="sound-btn" onclick='+ buttonFunc3 +'>Reset</button><button class="sound-btn" onclick='+ buttonFunc2 +'>Say Whole Word</button></div>' + allClusterData[i][j].chars + '</div>';
+			
+		}
+		
+		var toInsert = $('<span id="word' + i + '">' + insideDiv + '</span>');
+			
+		$( "#output-txt" ).append(toInsert);
+		
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+
 	
 	
 	
@@ -567,8 +591,6 @@ var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9, sym1
 	if (found) {colorcount++;};
 }
 
-
-
 var nonRhoticScan = function(sym) {
 	
 	var found = false;
@@ -583,11 +605,11 @@ var nonRhoticScan = function(sym) {
 					
 					if (phonComparisons[i].phons[p][j+1] != null && !checkIfVowel(phonComparisons[i].phons[p][j+1])) { // Checks if next is a consonant
 						changeColour(i,p,colors[colorcount]);
-						console.log("1 - " + allWordData[i]);
+						
 						found = true;
 					} else if (phonComparisons[i].phons[p+1] == "" && !checkIfVowel(phonComparisons[i].phons[p][j+1])) { // Checks if it's at the end, not perfect on 'y' endings
 						changeColour(i,p,colors[colorcount]);
-						console.log("2 - " + allWordData[i]);
+						
 						found = true;
 						
 					}
@@ -637,6 +659,94 @@ var vowelAfterScan = function(sym) {
 	
 }
 
+var stRuleScan = function() {
+	
+	var found = false;
+	
+	for (var i = 0; i < phonComparisons.length; i++) {
+		
+		for (var p = 0; p < phonComparisons[i].phons.length; p++) {
+			
+			for (var j = 0; j < phonComparisons[i].phons[p].length; j++) {
+				
+				if (checkIfUnvoiFric(phonComparisons[i].phons[p][j])) {
+					
+					if (checkIfUnvoiPlo(phonComparisons[i].phons[p][j+1])) { // Checks if there's an unvoiced plosive in the first pocket of phonetics
+						
+						if (checkIfVowel(phonComparisons[i].phons[p][j+2]) || (phonComparisons[i].phons[p][j+2] == null && checkIfVowel(phonComparisons[i].phons[p+1][0]))) {
+						
+							changeColour(i,p,colors[colorcount]);
+							found = true;
+						}
+						
+					} else if (phonComparisons[i].phons[p][j+1] == null && checkIfUnvoiPlo(phonComparisons[i].phons[p+1][0])) {
+						
+						if (checkIfVowel(phonComparisons[i].phons[p+1][1]) && phonComparisons[i].phons[p+1][1] == null) {
+						
+							changeColour(i,p,colors[colorcount]);
+							found = true;
+						}
+						
+					}
+				
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	//TODO: Do REVERSE
+	if (found) {colorcount++;};
+	
+}
+
+var checkIfUnvoiFric = function(sym) {
+	var res;
+	
+		switch(sym) {
+		
+    case "S":
+        res = true;
+        break;
+    case "F":
+        res = true;
+        break;
+	case "SH":
+        res = true;
+        break;
+	case "TH":
+        res = true;
+        break;
+	case "H":
+        res = true;
+	default:
+        res = false;
+} 
+	return res;
+}
+
+var checkIfUnvoiPlo = function(sym) {
+	var res;
+	
+		switch(sym) {
+		
+    case "P":
+        res = true;
+        break;
+    case "T":
+        res = true;
+        break;
+	case "K":
+        res = true;
+        break;
+	default:
+        res = false;
+} 
+	return res;
+}
+
 var atEndScan = function(sym) {
 	
 	var found = false;
@@ -651,7 +761,7 @@ var atEndScan = function(sym) {
 								
 					if (phonComparisons[i].phons[p][j+1] == null && phonComparisons[i].phons[p+1] == "") {
 						changeColour(i,phonComparisons[i].letters.length-2,colors[colorcount]);
-						console.log(allWordData[i] + ", Next In Cluster: " + phonComparisons[i].phons[p][j+1] + ", Next Cluster: " + phonComparisons[i].phons[p][j+1]);
+						
 						found = true;
 						
 					}
@@ -683,11 +793,11 @@ var darkLScan = function(sym) {
 					
 					if (phonComparisons[i].phons[p][j+1] != null && !checkIfVowel(phonComparisons[i].phons[p][j+1])) { // Checks if next is a consonant
 						changeColour(i,p,colors[colorcount]);
-						console.log("1 - " + allWordData[i]);
+						
 						found = true;
 					} else if (phonComparisons[i].phons[p+1] == "" && !checkIfVowel(phonComparisons[i].phons[p][j+1])) { // Checks if it's at the end, not perfect on 'y' endings
 						changeColour(i,p,colors[colorcount]);
-						console.log("2 - " + allWordData[i]);
+						
 						found = true;
 						
 					}
@@ -884,6 +994,214 @@ var highlight = function(i, j) {
 	
 }
 
+var sayWord = function (arr) {
+	
+	var audioArr = [];
+	
+	console.log(arr);
+	
+	for (var j = 0; j < arr.phons.length; j++) {
+		audioArr[j] = new Audio(getAudio(arr.phons[j][0]));
+	}
+	
+	console.log(audioArr);
+	
+	for (var j = 0; j < audioArr.length-1; j++) {
+		var next = j+1;
+		(function(next, j, audioArr) {
+        audioArr[j].addEventListener("ended", function () {
+			audioArr[next].play();
+         })
+		})(j);
+		
+		
+	}
+	
+	
+	audioArr[0].play();
+	
+}
+
+var popUp = function(i, j) {
+	
+	if (!popped) {
+	
+	$( "#popup" + i + "-" + j ).css({"visibility": "visible", "display": "block","opacity": 1});
+		
+	var audio = new Audio(getAudio(phonComparisons[i].phons[j][0]));
+	audio.play();
+	console.log("firing!");
+	
+	popped = true;
+	
+	};
+	
+}
+
+var popDown = function (i, j) {
+	
+	$( "#popup" + i + "-" + j ).css({"visibility": "hidden","display": "none", "opacity": 0});
+	popped = false;
+	
+}
+
+var getAudio = function (sym) {
+	
+	var res;
+	
+		switch(sym) {
+		
+    case "AA":
+        res = "sounds/longah.mp3";
+        break;
+    case "AE":
+        res = "sounds/ah.mp3";
+        break;
+	case "AH0":
+        res = "sounds/schwa.mp3";
+        break;
+	case "AH1":
+        res = "sounds/uh.mp3";
+        break;
+	case "AH2":
+        res = "sounds/uh.mp3";
+        break;
+	case "SH":
+		res = "sounds/shsound.mp3";
+		break;
+	case "AO":
+        res = "sounds/or.mp3";
+        break;	
+		
+	case "AW":
+        res = "sounds/ow.mp3";
+        break;
+	case "AY":
+        res = "sounds/igh.mp3";
+        break;
+	case "B":
+        res = "sounds/bsound.mp3";
+        break;
+	case "CH":
+        res = "sounds/chsound.mp3";
+        break;
+	case "D":
+        res = "sounds/dsound.mp3";
+        break;		
+		
+	case "DH":
+        res = "sounds/voicedth.mp3";
+        break;
+	case "EH":
+        res = "sounds/eh.mp3";
+        break;
+	case "ER0":
+        res = "sounds/schwa.mp3";
+        break;
+	case "ER1":
+        res = "sounds/ur.mp3";
+        break;
+	case "ER2":
+        res = "sounds/ur.mp3";
+        break;
+	case "EY":
+        res = "sounds/ay.mp3";
+        break;
+	case "F":
+        res = "sounds/fsound.mp3";
+        break;
+		
+	case "G":
+        res = "sounds/gsound.mp3";
+        break;
+	case "HH":
+        res = "sounds/hsound.mp3";
+        break;
+	case "IH":
+        res = "sounds/ih.mp3";
+        break;
+	case "IY0":
+        res = "sounds/ee.mp3";
+        break;
+	case "IY1":
+        res = "sounds/ee.mp3";
+        break;
+	case "IY2":
+        res = "sounds/ee.mp3";
+        break;
+	case "JH":
+        res = "sounds/jsound.mp3";
+        break;
+		
+	case "K":
+        res = "sounds/ksound.mp3";
+        break;
+	case "L":
+        res = "sounds/lightl.mp3";
+        break;
+	case "M":
+        res = "sounds/msound.mp3";
+        break;
+	case "N":
+        res = "sounds/nsound.mp3";
+        break;
+	case "NG":
+        res = "sounds/ngsound.mp3";
+        break;
+		
+	case "OW":
+        res = "sounds/o.mp3";
+        break;
+	case "OY":
+        res = "sounds/oy.mp3";
+        break;
+	case "P":
+        res = "sounds/psound.mp3";
+        break;
+	case "R":
+        res = "sounds/rsound.mp3";
+        break;
+	case "S":
+        res = "sounds/ssound.mp3";
+        break;
+		
+	case "T":
+        res = "sounds/tsound.mp3";
+        break;
+	case "TH":
+        res = "sounds/unvoicedth.mp3";
+        break;
+	case "UH":
+        res = "sounds/ouh.mp3";
+        break;
+	case "UW":
+        res = "sounds/oo.mp3";
+        break;
+	case "V":
+        res = "sounds/vsound.mp3";
+        break;
+		
+	case "W":
+        res = "sounds/wsound.mp3";
+        break;
+	case "Y":
+        res = "sounds/ysound.mp3";
+        break;
+	case "Z":
+        res = "sounds/zsound.mp3";
+        break;
+	case "ZH":
+        res = "sounds/zhsound.mp3";
+        break;
+    default:
+        res = sym;
+		
+	}
+	
+	return res;
+	
+}
+
 window.onload = function() {
 	
 		var client = new XMLHttpRequest();
@@ -894,4 +1212,6 @@ window.onload = function() {
 		}
 		
 		client.send();
+		
+		onPush();
 }

@@ -6,16 +6,7 @@
 <body>
 
 <div id="input-div">
-	<textarea id="input-txt" style="width:320px;height:240px;">Arthur the Rat
-Once upon a time there was a rat who couldn't make up his mind. Whenever the other rats asked him if he would like to come out hunting with them, he would answer in a hoarse voice, "I don't know." And when they said, "Would you rather stay inside?" he wouldn't say yes, or no either. He'd always shirk making a choice.
-One fine day his aunt Josephine said to him, "Now look here! No one will ever care for you if you carry on like this. You have no more mind of your own than a greasy old blade of grass!" The young rat coughed and looked wise, as usual, but said nothing.
-"Don't you think so?" said his aunt stamping with her foot, for she couldn't bear to see the young rat so coldblooded. "I don't know," was all he ever answered, and then he'd walk off to think for an hour or more, whether he would stay in his hole in the ground or go out into the loft.
-One night the rats heard a loud noise in the loft. It was a very dreary old place. The roof let the rain come washing in, the beams and rafters had all rotted through, so that the whole thing was quite unsafe. At last one of the joists gave way, and the beams fell with one edge on the floor. The walls shook, and the cupola fell off, and all the rats' hair stood on end with fear and horror.
-"This won't do," said their leader. "We can't stay cooped up here any longer." So they sent out scouts to search for a new home. A little later on that evening the scouts came back and said they had found an old-fashioned horse-barn where there would be room and board for all of them. The leader gave the order at once, "Company fall in!" and the rats crawled out of their holes right away and stood on the floor in a long line.
-Just then the old rat caught sight of young Arthur -- that was the name of the shirker. He wasn't in the line, and he wasn't exactly outside it--he stood just by it. "Come on, get in line!" growled the old rat coarsely. "Of course you're coming too?" "I don't know," said Arthur calmly. "Why, the idea of it! You don't think it's safe here any more, do you?"
-"I'm not certain," said Arthur undaunted. "The roof may not fall down yet." "Well," said the old rat, "we can't wait for you to join us." Then he turned to the others and shouted, "Right about face! March!" and the long line marched out of the barn while the young rat watched them.
-"I think I'll go tomorrow," he said to himself, "but then again, perhaps I won't -- it's so nice and snug here. I guess I'll go back to my hole under the log for a while just to make up my mind." But during the night there was a big crash. Down came beams, rafters, joists -- the whole business.
-Next morning -- it was a foggy day -- some men came to look over the damage. It seemed odd that the old building was not haunted by rats. But at last one of them happened to move a board, and he caught sight of a young rat, quite dead, half in and half out of his hole. Thus the shirker got his due, and there was no mourning for him.</textarea>
+	<textarea id="input-txt" style="width:320px;height:240px;" placeholder="Add any text to me - a news article, a monologue, or anything - then press 'Convert'."></textarea>
 	<button class="sound-btn" id="button" onclick="onPush();">Convert</button>
 	<button class="sound-btn" id="reset-btn" onclick="resetScans();">Reset</button>
 	<a href="#" target="_blank">New Page</a>
@@ -23,69 +14,26 @@ Next morning -- it was a foggy day -- some men came to look over the damage. It 
 </div>
 
 <div id="btns-div">
-	<h2>Fricatives</h2>
-	<button class="sound-btn" onclick="scanFor('TH')">Unvoiced TH- /&#952/</button>
-	<button class="sound-btn" onclick="scanFor('DH')">Voiced TH - /&#240/</button>
-	<button class="sound-btn" onclick="scanFor('S')">S - /s/</button>
-	<button class="sound-btn" onclick="scanFor('Z')">Z - /z/</button>
-	<br>
-	<button class="sound-btn" onclick="scanFor('F')">F - /f/</button>
-	<button class="sound-btn" onclick="scanFor('V')">V - /v/</button>
-	<button class="sound-btn" onclick="scanFor('HH')">H - /h/</button>
-	<button class="sound-btn" onclick="scanFor('SH')">Sh - /&#643/</button>
-	<button class="sound-btn" onclick="scanFor('ZH')">Zh - /&#658/</button>
-	<h2>Plosives</h2>
-	<button class="sound-btn" onclick="scanFor('P')">P - /p/</button>
-	<button class="sound-btn" onclick="scanFor('B')">B - /b/</button>
-	<button class="sound-btn" onclick="scanFor('T')">T - /t/</button>
-	<button class="sound-btn" onclick="scanFor('D')">D - /d/</button>
-	<button class="sound-btn" onclick="scanFor('K')">K - /k/</button>
-	<button class="sound-btn" onclick="scanFor('G')">G - /g/</button>
-	<h2>Other</h2>
-	<button class="sound-btn" onclick="scanFor('CH')">CH - /t&#643/</button>
-	<button class="sound-btn" onclick="scanFor('JH')">J - /&#676/</button>
-	<br>
-	<button class="sound-btn" onclick="scanFor('M')">M - /m/</button>
-	<button class="sound-btn" onclick="scanFor('N')">N -/n/</button>
-	<button class="sound-btn" onclick="scanFor('NG')">NG - /&#331/</button>
-	<br>
-	<!-- <button class="sound-btn" onclick="scanFor('L')">All L Sounds</button> -->
+	<h2>Misc Sounds</h2>	
 	<button class="sound-btn" onclick="vowelAfterScan('L')">Light L Sounds</button>
 	<button class="sound-btn" onclick="darkLScan('L')">Dark L Sounds</button>
-	<!-- <button class="sound-btn" onclick="scanFor('R')">All R Sounds</button> -->
 	<button class="sound-btn" onclick="vowelAfterScan('R', 'ER0', 'ER1', 'ER2')">Voiced R Sounds</button>
 	<button class="sound-btn" onclick="nonRhoticScan('R')">Dropped R's</button>
 	<br>
 	<button class="sound-btn" onclick="scanFor('Y')">Y - /y/</button>
 	<button class="sound-btn" onclick="scanFor('W')">W - /w/</button>
-	<h2>Short Vowels</h2>
-	<button class="sound-btn" onclick="scanFor('IH')">Short IH - /&#618/</button>
-	<button class="sound-btn" onclick="scanFor('UH')">Short Ooh - /&#650/</button>
-	<button class="sound-btn" onclick="scanFor('ER0','AH0')">Schwa - /&#601/</button>
-	<button class="sound-btn" onclick="scanFor('AH1','AH2')">Short Uh /&#652/</button>
-	<button class="sound-btn" onclick="scanFor('EH')">Short Eh - /e/</button>
-	<button class="sound-btn" onclick="scanFor('AE')">Short Ah - /&#230/ (American)</button>
-	<h2>Long Vowels</h2>
-	<button class="sound-btn" onclick="scanFor('IY1', 'IY2')">Long Ee - /i&#720/</button>
-	<button class="sound-btn" onclick="scanFor('UW')">Long Oo - /u&#720/</button>
-	<button class="sound-btn" onclick="scanFor('AA')">Long Ah - /&#593&#720/ (American)</button>
-	<button class="sound-btn" onclick="scanFor('ER1','ER2')">Long Er - /&#604&#720/</button>
-	<button class="sound-btn" onclick="scanFor('AO')">Long Or - /&#596&#720/ (American)</button>
-	<h2>Diphthongs</h2>
-	<button class="sound-btn" onclick="scanFor('EY')">AY - /e&#618/</button>
-	<button class="sound-btn" onclick="scanFor('AY')">I - /a&#618/</button>
-	<button class="sound-btn" onclick="scanFor('AW')">OW - /a&#650/</button>
-	<button class="sound-btn" onclick="scanFor('OW')">O - /&#601&#650/</button>
-	<button class="sound-btn" onclick="scanFor('OY')">OY - /&#596&#618/</button>
+	<br>	
 	<h2>Instructions</h2>
 	<button class="sound-btn" onclick="scanFor('AE','AA','AY','AW')">Drop The Jaw</button>
 	<button class="sound-btn" onclick="scanFor('AH0','AH1','AH2','ER0','ER1','ER2','AA','IH','UH','OW')">Relaxed Lips</button>
-	<button class="sound-btn" onclick="scanFor('IY0')">Unstressed /i/</button>
+	<button class="sound-btn" onclick="atEndScan('IY0')">Unstressed /i/</button>
 	<button class="sound-btn" onclick="atEndScan('T')">/t/ Endings</button>
+	<button class="sound-btn" onclick="stRuleScan()">'ST' Rule</button>
 	
 	<h2>Custom</h2>
 	<input type="text" id="custom-txt"></input>
 	<button class="sound-btn" onclick="scanCustom()">Custom</button>
+	<button class="sound-btn" id="button" onclick="onPush();">Convert</button>
 	<button class="sound-btn" id="reset-btn" onclick="resetScans();">Reset</button>
 	<a href="http://www.speech.cs.cmu.edu/cgi-bin/cmudict" target="_blank">CMU Dictionary</a>
 	<h2>Accents</h2>

@@ -22,7 +22,6 @@
 	font-size: 24px;
 	font-family: arial;
 	line-height: 40px;
-	z-index: 1;
 	position: relative;
 }
 
@@ -55,11 +54,12 @@
     position:absolute;
     top: -9px;
     left:-12px;
-    background: white;
+    background-color: rgba(255, 255, 255, 0.9);
 	padding: 0px 10px 0px 10px;
 	min-width: 130px;
 	margin: 0px;
-    visibility: gone;
+    visibility: hidden;
+	display: none;
 	opacity: 0;
     transition: opacity 0.4s;
 	z-index: 999999;

@@ -14,33 +14,7 @@
 </div>
 
 <div id="btns-div">
-	<h2>Fricatives</h2>
-	<button class="sound-btn" onclick="scanFor('TH')">Unvoiced TH- /&#952/</button>
-	<button class="sound-btn" onclick="scanFor('DH')">Voiced TH - /&#240/</button>
-	<button class="sound-btn" onclick="scanFor('S')">S - /s/</button>
-	<button class="sound-btn" onclick="scanFor('Z')">Z - /z/</button>
-	<br>
-	<button class="sound-btn" onclick="scanFor('F')">F - /f/</button>
-	<button class="sound-btn" onclick="scanFor('V')">V - /v/</button>
-	<button class="sound-btn" onclick="scanFor('HH')">H - /h/</button>
-	<button class="sound-btn" onclick="scanFor('SH')">Sh - /&#643/</button>
-	<button class="sound-btn" onclick="scanFor('ZH')">Zh - /&#658/</button>
-	<h2>Plosives</h2>
-	<button class="sound-btn" onclick="scanFor('P')">P - /p/</button>
-	<button class="sound-btn" onclick="scanFor('B')">B - /b/</button>
-	<button class="sound-btn" onclick="scanFor('T')">T - /t/</button>
-	<button class="sound-btn" onclick="scanFor('D')">D - /d/</button>
-	<button class="sound-btn" onclick="scanFor('K')">K - /k/</button>
-	<button class="sound-btn" onclick="scanFor('G')">G - /g/</button>
-	<h2>Other</h2>
-	<button class="sound-btn" onclick="scanFor('CH')">CH - /t&#643/</button>
-	<button class="sound-btn" onclick="scanFor('JH')">J - /&#676/</button>
-	<br>
-	<button class="sound-btn" onclick="scanFor('M')">M - /m/</button>
-	<button class="sound-btn" onclick="scanFor('N')">N -/n/</button>
-	<button class="sound-btn" onclick="scanFor('NG')">NG - /&#331/</button>
-	<br>
-	
+	<h2>Misc Sounds</h2>	
 	<button class="sound-btn" onclick="vowelAfterScan('L')">Light L Sounds</button>
 	<button class="sound-btn" onclick="darkLScan('L')">Dark L Sounds</button>
 	<button class="sound-btn" onclick="vowelAfterScan('R', 'ER0', 'ER1', 'ER2')">Voiced R Sounds</button>
@@ -48,30 +22,11 @@
 	<br>
 	<button class="sound-btn" onclick="scanFor('Y')">Y - /y/</button>
 	<button class="sound-btn" onclick="scanFor('W')">W - /w/</button>
-	<h2>Short Vowels</h2>
-	<button class="sound-btn" onclick="scanFor('IH')">Short IH - /&#618/</button>
-	<button class="sound-btn" onclick="scanFor('UH')">Short Ooh - /&#650/</button>
-	<button class="sound-btn" onclick="scanFor('ER0','AH0')">Schwa - /&#601/</button>
-	<button class="sound-btn" onclick="scanFor('AH1','AH2')">Short Uh /&#652/</button>
-	<button class="sound-btn" onclick="scanFor('EH')">Short Eh - /e/</button>
-	<button class="sound-btn" onclick="scanFor('AE')">Short Ah - /&#230/ (American)</button>
-	<h2>Long Vowels</h2>
-	<button class="sound-btn" onclick="scanFor('IY1', 'IY2')">Long Ee - /i&#720/</button>
-	<button class="sound-btn" onclick="scanFor('UW')">Long Oo - /u&#720/</button>
-	<button class="sound-btn" onclick="scanFor('AA')">Long Ah - /&#593&#720/ (American)</button>
-	<button class="sound-btn" onclick="scanFor('ER1','ER2')">Long Er - /&#604&#720/</button>
-	<button class="sound-btn" onclick="scanFor('AO')">Long Or - /&#596&#720/ (American)</button>
-	<h2>Diphthongs</h2>
-	<button class="sound-btn" onclick="scanFor('EY')">AY - /e&#618/</button>
-	<button class="sound-btn" onclick="scanFor('AY')">I - /a&#618/</button>
-	<button class="sound-btn" onclick="scanFor('AW')">OW - /a&#650/</button>
-	<button class="sound-btn" onclick="scanFor('OW')">O - /&#601&#650/</button>
-	<button class="sound-btn" onclick="scanFor('OY')">OY - /&#596&#618/</button>
-	
+	<br>	
 	<h2>Instructions</h2>
 	<button class="sound-btn" onclick="scanFor('AE','AA','AY','AW')">Drop The Jaw</button>
 	<button class="sound-btn" onclick="scanFor('AH0','AH1','AH2','ER0','ER1','ER2','AA','IH','UH','OW')">Relaxed Lips</button>
-	<button class="sound-btn" onclick="scanFor('IY0')">Unstressed /i/</button>
+	<button class="sound-btn" onclick="atEndScan('IY0')">Unstressed /i/</button>
 	<button class="sound-btn" onclick="atEndScan('T')">/t/ Endings</button>
 	<button class="sound-btn" onclick="stRuleScan()">'ST' Rule</button>
 	

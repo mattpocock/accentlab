@@ -17,7 +17,7 @@ var onPush = function() {
 	paragraphs = [];
 	fullWordTranslations = [];
 	
-	var input = "Phonetic Pangram: \n\n That quick beige fox jumped in the air over each thin dog. Look out, I half shout, for he's foiled you again, creating chaos.\n\nText:\n\n" + document.getElementById("input-txt").value;
+	var input = "Phonetic Pangram: \n That beige fox quickly jumped in the air over each thin dog. Look out, I half shout, for he's foiled you again, creating chaos.\nText:\n" + document.getElementById("input-txt").value;
 	
 	var inputArr = [];
 	
@@ -150,7 +150,7 @@ var onPush = function() {
 			
 			var l = noTransWords[i][j];
 			
-			if (l == "a" || l == "e" || l == "i" || l == "o" || l == "u" || l == "A" || l == "E" || l == "I" || l == "O" || l == "U") {
+			if (l == "a" || l == "e" || l == "i" || l == "o" || l == "u" || l == "A" || l == "E" || l == "I" || l == "O" || l == "U" || l == "y" || l == "Y") {
 				
 				if (prevType == "start") {
 					type = "vowel";
@@ -165,7 +165,7 @@ var onPush = function() {
 					prevType = "vowel";
 				}
 				
-			} else if (l == "\"" || l == "\'" || l == "\n" || l == "\r\n" || l == "“" || l == "\“" || l == "\”" || l == "\’" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")"){
+			} else if (l == "/}" || l == "/{" || l == "/]" || l == "/[" || l == '"' || l == "\'" || l == "\n" || l == "\r\n" || l == "“" || l == "\“" || l == "\”" || l == "\’" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")"){
 				if (prevType == "start") {
 					type = "punc";
 					chars = l;
@@ -289,7 +289,7 @@ var onPush = function() {
 		
 		if (i == paragraphs[paraCounter]+1) {
 			
-			$( "#output-txt" ).append("<br><a></a>");
+			$( "#output-txt" ).append("<br><br><a></a>");
 			paraCounter++;
 			i--;
 			
@@ -315,8 +315,9 @@ var onPush = function() {
 			
 			var buttonFunc = "scanFor('"+ phonComparisons[i].phons[j][0] + "')";
 			var buttonFunc2 = "sayWord(phonComparisons["+i+"])";
+			var buttonFunc3 = "resetScans();";
 			
-			insideDiv += '<div class="cluster" onClick="popUp('+i+','+j+');"id="cluster'+i+'-'+j+'" onclick="highlight('+ i + ',' + j +')"><div class="popup" onmouseleave="popDown('+i+','+j+');" id="popup'+i+'-'+j+'">'+ allClusterData[i][j].chars + ' - /' + phonsToAdd + '/<br><button class="sound-btn" onclick='+ buttonFunc +'>Find All</button><button class="sound-btn" onclick='+ buttonFunc2 +'>Say Whole Word</button></div>' + allClusterData[i][j].chars + '</div>';
+			insideDiv += '<div class="cluster" onClick="popUp('+i+','+j+');"id="cluster'+i+'-'+j+'" onclick="highlight('+ i + ',' + j +')"><div class="popup" onmouseleave="popDown('+i+','+j+');" id="popup'+i+'-'+j+'">'+ allClusterData[i][j].chars + ' - /' + phonsToAdd + '/<br><button class="sound-btn" onclick='+ buttonFunc +'>Find All</button><button class="sound-btn" onclick='+ buttonFunc3 +'>Reset</button><button class="sound-btn" onclick='+ buttonFunc2 +'>Say Whole Word</button></div>' + allClusterData[i][j].chars + '</div>';
 			
 		}
 		

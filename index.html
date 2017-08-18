@@ -4,15 +4,48 @@
 <meta charset="UTF-8">
 </head>
 <body>
+<div class="header">
+<div class="header-content">
+<div style="display:inline-block;">
+	<h1 class="title">Phonetic Translator</h1>
+</div>
+<div style="display:inline-block;">
 
-<div id="input-div">
-	<textarea id="input-txt" style="width:320px;height:240px;" placeholder="Add any text to me - a news article, a monologue, or anything - then press 'Convert'."></textarea>
-	<button class="sound-btn" id="button" onclick="onPush();">Convert</button>
-	<button class="sound-btn" id="reset-btn" onclick="resetScans();">Reset</button>
-	<a href="#" target="_blank">New Page</a>
+	<select id="formType">
+	<option value="cons">Consonant</option>
+	<option value="vowel">Vowel</option>
+	<option value="other">Other</option>
+	</select>
 	
+	<select id="formSound">
+	</select>
+	
+	<select id="formPosition">
+	<option value="any">Any Position</option>
+	<option value="start">At Start</option>
+	<option value="end">At End</option>
+	</select>
+	
+	<button id="formSubmit" onclick="searchButtonPressed()">Search</button>
+	<button id="reset-btn" onclick="resetScans();">Reset</button>
+
+</div>
+<div style="display:inline-block;">
+<!--<p id="foundTxt" style="color:white; font-family: arial;"></p>-->
 </div>
 
+</div>
+</div>
+
+<div class="container">
+
+<div id="input-div">
+	<textarea id="input-txt" style="width:700px;height:240px;" placeholder="Add any text to me - a news article, a monologue, or anything - then press 'Convert'."></textarea>
+</div>
+<div id="btn-div" style="text-align: center;">
+	<button class="sound-btn" id="button" style="text-align: center;" onclick="onPush();">Convert</button>
+</div>
+<!--
 <div id="btns-div">
 	<h2>Misc Sounds</h2>	
 	<button class="sound-btn" onclick="vowelAfterScan('L')">Light L Sounds</button>
@@ -41,14 +74,18 @@
 	<button class="sound-btn" onclick="scanFor('OW','EY','AY','AH1','AH2');scanFor('NG');scanFor('TH','DH', 'HH');darkLScan('L');">Birmingham</button>
 	<button class="sound-btn" onclick="scanFor('EY','AY','AW','OW');atEndScan('NG');atEndScan('T');scanFor('TH','DH','HH');darkLScan('L');">Cockney</button>
 	<button class="sound-btn" onclick="scanFor('AE','AA','AO','AW','OW');atEndScan('T');nonRhoticScan('R');vowelAfterScan('L');">General American</button>
+	<button class="sound-btn" onclick="atEndScan('T');atEndScan('D');atEndScan('P');atEndScan('B');atEndScan('K');atEndScan('G');">Plosive Endings</button>
+	<button class="sound-btn" onclick="atEndScan('F');atEndScan('V');">F and V Endings</button>
 
 </div>
-
+-->
 <div id="output-div">
-	<p id="output-txt">Output Goes Here</p>
+	<p id="output-txt"></p>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-<script src="/phonetics/main.js"></script>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="main.js"></script>
 </body>
 </html>

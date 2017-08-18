@@ -1,4 +1,7 @@
-@@ -0,0 +1,87 @@
+body {
+	margin: 0;
+}
+
 .word-anchor {
 	text-decoration: none;
 	color: black;
@@ -28,16 +31,17 @@
 .sound-btn {
 	margin: 5px 0px 5px 0px;
 	border-width: 1px;
-	padding: 5px;
+	padding: 10px;
+	font-weight: bold;
 	display: inline-block;
     box-sizing: content-box;
     border-color: buttonface;
     border-image: initial;
 }
-
 .sound-btn:hover {
 	background-color: ligh;
 }
+
 
 
 /* Divs */
@@ -46,6 +50,34 @@
 	width: 700px;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.header {
+	height: 55px;
+	width: 100%;
+	background-color: #005689;
+	position: fixed;
+	z-index: 999;
+}
+
+.header-content {
+	width: 700px;
+	margin: auto;
+}
+
+.title {
+	font-size:20px;
+	line-height:20px;
+	margin: 17px 17px 17px 17px;
+	color: white;
+	font-family: Open Sans, Helvetica, Verdana;
+}
+
+.container {
+	padding-top: 63px;
+	padding-bottom: 28px;
+	width: 100%;
+	
 }
 
 /* Pop-Up */
@@ -89,4 +121,42 @@
 	position: relative;
 	display: inline;
 }
+
+/* Menu */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

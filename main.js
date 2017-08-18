@@ -10,6 +10,10 @@ var colorcount = 0;
 var paragraphs = [];
 var popped;
 
+var consOptions = ["Fricatives", "TH - Think", "TH - This","All TH Sounds","/s/ - See", "/z/ - Is", "/f/ - Few", "/v/ - View", "/h/ - How", "SH - Show", "ZH - Measure","Plosives","/p/ - Pie", "/b/ - Buy", "/t/ - Tie", "/d/ - Dye", "/k/ - Kite", "/g/ - Guy", "Affricates", "CH - Chin", "J - Joke", "Nasals","/m/ - May", "/n/ - No", "NG - Sing", "Approximants","Light L", "Dark L", "All L's", "All R Sounds", "Dropped R's", "Y - You", "W - Why"];
+var vowelOptions = ["Short Vowels", "EH - Set", "Ih - Sit", "Ooh - Soot", "Uh - Shut", "The Schwa", "Long Vowels","Ee - See", "Oo - Sue", "Er - Sir", "Diphthongs", "Ay - Say", "I - Sigh", "Ow - Sound", "O - So", "Oy - Soy"];
+var otherOptions = ["??"];
+
 var onPush = function() {
 	
 	allWordData = [];
@@ -17,7 +21,11 @@ var onPush = function() {
 	paragraphs = [];
 	fullWordTranslations = [];
 	
-	var input = "Phonetic Pangram: \n That beige fox quickly jumped in the air over each thin dog. Look out, I half shout, for he's foiled you again, creating chaos.\nText:\n" + document.getElementById("input-txt").value;
+	var input = document.getElementById("input-txt").value;
+	
+	$("#input-txt").animate({height:'60'}, 800);
+	
+	
 	
 	var inputArr = [];
 	
@@ -68,6 +76,8 @@ var onPush = function() {
 	
 	
 	var out = document.getElementById("output-txt"); // Clears output text
+	
+	$('#output-txt').css('opacity', '0');
 	out.innerHTML = "";
 	
 	
@@ -330,7 +340,7 @@ var onPush = function() {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	
+	$('#output-txt').animate({opacity: 1}, 1000);
 
 	
 	
@@ -564,6 +574,7 @@ var changeColour = function(i,p,color) {
 
 var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9, sym10) {
 	var found = false;
+	var numberFound = 0;
 	
 	for (var i = 0; i < phonComparisons.length; i++) {
 		
@@ -578,6 +589,7 @@ var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9, sym1
 					changeColour(i,p,colors[colorcount]);
 				
 				found = true;
+				numberFound++;
 				
 				}
 			
@@ -589,6 +601,9 @@ var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9, sym1
 	
 	//TODO: Do REVERSE
 	if (found) {colorcount++;};
+	
+	var ft = document.getElementById("foundTxt");
+	ft.innerHTML = numberFound + " found!";
 }
 
 var nonRhoticScan = function(sym) {
@@ -749,6 +764,8 @@ var checkIfUnvoiPlo = function(sym) {
 
 var atEndScan = function(sym) {
 	
+	var numberFound = 0;
+	
 	var found = false;
 	
 	for (var i = 0; i < phonComparisons.length; i++) {
@@ -763,6 +780,7 @@ var atEndScan = function(sym) {
 						changeColour(i,phonComparisons[i].letters.length-2,colors[colorcount]);
 						
 						found = true;
+						numberFound++;
 						
 					}
 				
@@ -777,9 +795,14 @@ var atEndScan = function(sym) {
 	//TODO: Do REVERSE
 	if (found) {colorcount++;};
 	
+	var ft = document.getElementById("foundTxt");
+	ft.innerHTML = numberFound + " found!";
+	
 }
 
 var darkLScan = function(sym) {
+	
+	var numberFound = 0;
 	
 	var found = false;
 	
@@ -795,10 +818,12 @@ var darkLScan = function(sym) {
 						changeColour(i,p,colors[colorcount]);
 						
 						found = true;
+						numberFound++;
 					} else if (phonComparisons[i].phons[p+1] == "" && !checkIfVowel(phonComparisons[i].phons[p][j+1])) { // Checks if it's at the end, not perfect on 'y' endings
 						changeColour(i,p,colors[colorcount]);
 						
 						found = true;
+						numberFound++;
 						
 					}
 				
@@ -811,6 +836,9 @@ var darkLScan = function(sym) {
 	}
 	
 	if (found) {colorcount++;};
+	
+	var ft = document.getElementById("foundTxt");
+	ft.innerHTML = numberFound + " found!";
 	
 }
 
@@ -985,6 +1013,9 @@ var resetScans = function() {
 		}
 		
 	}
+	
+	var ft = document.getElementById("foundTxt");
+	ft.innerHTML = "";
 
 }
 
@@ -1202,10 +1233,282 @@ var getAudio = function (sym) {
 	
 }
 
+var menuListener = function () {
+	
+	$( "#formType" ).change(function() {
+	switchSoundList($('#formType').find(":selected").text());
+	
+});
+	
+}
+
+var switchSoundList = function (txt) {
+	
+	var arr;
+	
+	if (txt == "Consonant") {
+		arr = consOptions;
+	} else if (txt == "Vowel") {
+		arr = vowelOptions;
+	} else {
+		arr = otherOptions;
+	}
+	
+	$('#formSound').find('option').remove().end();
+	
+	for (var i = 0; i < arr.length; i++) {
+		
+		if (arr[i] == "Fricatives" || arr[i] == "Plosives" || arr[i] == "Affricates" || arr[i] == "Nasals" || arr[i] == "Approximants" || arr[i] == "Short Vowels" || arr[i] == "Long Vowels" || arr[i] == "Diphthongs") {
+			$('#formSound').append('<option style="background-color: #005689; color:white;">' + arr[i] + '</option>');
+			console.log("strong");
+		} else {
+			$('#formSound').append('<option>' + arr[i] + '</option>');
+		}
+		
+	}
+	
+}
+
+var searchButtonPressed = function () {
+	
+	var sound = $('#formSound').find(":selected").text();
+	var pos = $('#formPosition').find(":selected").text();
+	
+	var exception = checkExceptions(sound);
+	
+	
+	
+	if (!exception) {
+		
+	
+		var t = menuToSound(sound);
+		
+		var sym1, sym2, sym3, sym4, sym5, sym6;
+		if (t.constructor === Array) {
+			console.log("it's an array!")
+			sym1 = t[0];
+			sym2 = t[1];
+			sym3 = t[2];
+			sym4 = t[3];
+			sym5 = t[4];
+			sym6 = t[5];
+		} else {
+			sym1 = t;
+		}
+	
+		if (pos == "Any Position") {
+			scanFor(sym1, sym2, sym3, sym4, sym5, sym6);
+		} else if (pos == "At Start") {
+			alert("Scanning at Start is not quite coded yet.");
+		} else {
+			atEndScan(sym1);
+		}
+	}
+	
+}
+
+var checkExceptions = function(txt) {
+	var res = false;
+	
+	switch (txt) {
+		case "Light L":
+		vowelAfterScan('L');
+		res = true;
+		break;
+		
+		case "Dark L":
+		darkLScan('L');
+		res = true;
+		break;
+		
+		case "Dropped R's":
+		vowelAfterScan('R', 'ER0', 'ER1', 'ER2');
+		res = true;
+		break;
+		
+		default:
+		res = false;
+		
+	}
+	
+	return res;
+}
+
+var menuToSound = function(txt) {
+	
+	var res;
+	
+	switch (txt) {
+		
+		case "TH - Think":
+		res = "TH";
+		break;
+		
+		case "TH - This":
+		res = "DH";
+		break; 
+		
+		case "All TH Sounds":
+		res = ["TH", "DH"];
+		break;
+		
+		case "/s/ - See":
+		res = "S";
+		break;
+		
+		case "/z/ - Is":
+		res = "Z";
+		break;
+		
+		case "/f/ - Few":
+		res = "F";
+		break;
+		
+		case "/v/ - View":
+		res = "V";
+		break;
+		
+		case "/h/ - How":
+		res = "HH";
+		break;
+		
+		case "SH - Show":
+		res = "SH";
+		break;
+		
+		case "ZH - Measure":
+		res = "ZH";
+		break;
+		
+		case "/p/ - Pie":
+		res = "P";
+		break;
+		
+		case "/b/ - Buy":
+		res = "B";
+		break;
+		
+		case "/t/ - Tie":
+		res = "T";
+		break;
+		
+		case "/d/ - Dye":
+		res = "D";
+		break;
+		
+		case "/k/ - Kite":
+		res = "K";
+		break;
+		
+		case "/g/ - Guy":
+		res = "G";
+		break;
+		
+		case "CH - Chin":
+		res = "CH";
+		break;
+		
+		case "J - Joke":
+		res = "JH";
+		break;
+		
+		case "/m/ - May":
+		res = "M";
+		break;
+		
+		case "/n/ - No":
+		res = "N";
+		break;
+		
+		case "NG - Sing":
+		res = "NG";
+		break;
+		
+		case "Y - You":
+		res = "Y";
+		break;
+		
+		case "W - Why":
+		res = "W";
+		break;
+		
+		case "All R Sounds":
+		res = "R";
+		break;
+		
+		case "All L's":
+		res = "L";
+		break;
+		
+		
+		
+		
+		
+		case "EH - Set":
+		res = "EH";
+		break;
+		
+		case "Ih - Sit":
+		res = "IH";
+		break;
+		
+		case "Ooh - Soot":
+		res = "UH";
+		break;
+		
+		case "Uh - Shut":
+		res = ["AH1", "AH2"];
+		break;
+		
+		case "The Schwa":
+		res = ["AH0", "ER0"];
+		break;
+		
+		case "Ee - See":
+		res = ["IY1", "IY2"];
+		break;
+		
+		case "Oo - Sue":
+		res = "UW";
+		break;
+		
+		case "Er - Sir":
+		res = ["ER1", "ER2"];
+		break;
+		
+		case "Ay - Say":
+		res = "EY";
+		break;
+		
+		case "I - Sigh":
+		res = "AY";
+		break;
+		
+		case "Ow - Sound":
+		res = "AW";
+		break;
+		
+		case "O - So":
+		res = "OW";
+		break;
+		
+		case "Oy - Soy":
+		res = "OY";
+		break;
+		
+		default:
+		res = undefined;
+		alert(txt + " can't be searched for yet! Try something else.");
+	}
+	
+	return res;
+	
+}
+
 window.onload = function() {
 	
 		var client = new XMLHttpRequest();
-		client.open('GET', '/phonetics/cmellon.txt');
+		client.open('GET', 'cmellon.txt');
 		
 		client.onreadystatechange = function() {
 		cmellontxt = client.responseText;
@@ -1213,5 +1516,6 @@ window.onload = function() {
 		
 		client.send();
 		
-		onPush();
+		menuListener();
+		switchSoundList("Consonant");
 }

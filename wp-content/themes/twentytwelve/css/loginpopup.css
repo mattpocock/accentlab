@@ -1,0 +1,92 @@
+#login-topscreen {
+	position: fixed;
+	width: 100%;
+	z-index: 99999999;
+	height: 100%;
+	background-color: rgba(0,0,0,0.4);
+	top: 0px;
+	left: 0px;
+	display: none;
+}
+
+.login-middlefix {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	
+}
+
+.login-popup {
+	width: 320px;
+	height: 240px;
+	background: #1A2980;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to left, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to left, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	color: white;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	padding: 20px;
+	box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.4);
+	text-align: center;
+}
+
+.login-title {
+	font-family: arial;
+	font-size: 38px;
+	text-align: center;
+	color: white;
+	padding: 0px;
+	margin: 0px;
+	margin-top: 25px;
+}
+
+.login-desc {
+	font-size: 18px;
+	line-height: 22px;
+	margin-top: 25px;
+}
+
+.pop-up-btn {
+	text-align: center;
+	margin: 5px;
+	margin-top: 30px;
+	height: 42px;
+	border: 2px solid rgb(28,175,246);
+	border-radius: 4px;
+	padding: 5px 20px 5px 20px;
+	font-size: 14px;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: white;
+	background-color: rgb(28,175,246);
+}
+
+.pop-up-btn:hover {
+	background-color: white;
+	color: rgb(28,175,246);
+	cursor: pointer;
+}
+
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,103 @@
+.home-section {
+	width: 100%;
+	float: left;
+	background: #757F9A;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to left, #D7DDE8, #757F9A);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to left, #D7DDE8, #757F9A); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+	color: white;
+}
+
+.top-section {
+	margin-top: 0px;
+}
+
+.gradient-3 {
+	background: #56CCF2;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #2F80ED, #56CCF2);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.home-text-box {
+	width: 50%;
+	margin: 100px 0px 100px 0px;
+	margin-left: 50px;
+	float: left;
+}
+
+.img-background {
+	float: left;
+}
+
+.img-background img {
+	height: 200px;
+	margin-top: 89px;
+	margin-bottom: 79px;
+	margin-left: 70px;
+}
+
+.img-right {
+	float: right;
+}
+
+.img-right img {
+	margin-right: 80px;
+	margin-left: 0px;
+}
+
+.home-section-title {
+	font-size: 30px;
+}
+
+.right-gradient {
+	background: #1F1C2C;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #928DAB, #1F1C2C);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #928DAB, #1F1C2C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.last-gradient {
+	background: #1A2980;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to left, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to left, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.float-right {
+	text-align: right;
+	float: right;
+	margin-left: 0px;
+	margin-right: 50px;
+}
+.home-section-subtitle {
+	font-size: 18px;
+	line-height: 24px;
+	margin-top: 10px;
+	font-weight: normal;
+}
+
+.home-section-btn {
+	text-align: center;
+	margin: 5px;
+	margin-top: 18px;
+	height: 42px;
+	border: 2px solid rgb(28,175,246);
+	border-radius: 4px;
+	padding: 5px 20px 5px 20px;
+	font-size: 14px;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: white;
+	background-color: rgb(28,175,246);
+}
+
+.home-section-btn:hover {
+	background-color: white;
+	color: rgb(28,175,246);
+	cursor: pointer;
+}
+
+.bottom-home-section {
+	margin-bottom: 30px;
+}

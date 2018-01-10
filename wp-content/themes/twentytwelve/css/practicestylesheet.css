@@ -1,0 +1,280 @@
+/* Context Area */
+
+#context-area {
+	background: #1F1C2C;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #928DAB, #1F1C2C);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #928DAB, #1F1C2C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	color: white;
+	padding: 40px;
+}
+
+.context-title {
+	font-size: 30px;
+}
+
+.context-desc {
+	font-size: 18px;
+	margin-top: 20px;
+	line-height: 26px;
+}
+
+
+.word-anchor {
+	text-decoration: none;
+	color: black;
+	border-radius:10px;
+	cursor: pointer;
+	cursor: hand;
+	display: inline;
+	font-size:24px;
+	font-family: arial;
+	line-height:40px;
+	color: black;
+	opacity: 1;
+}
+
+.word-anchor:focus, .word-anchor:hover {
+	text-decoration: none;
+	color: black;
+}
+
+#txt-title {
+	margin-top: 0px;
+	margin-left: 17px;
+	font-family: arial;
+}
+
+#twister-txt, #suggest-txt {
+	font-size: 16px;
+	font-family: arial;
+	font-style: italic;
+}
+
+.sound-btn {
+	margin: 5px 0px 5px 0px;
+	border-width: 1px;
+	padding: 10px;
+	font-weight: bold;
+	display: inline-block;
+    box-sizing: content-box;
+    border-color: buttonface;
+    border-image: initial;
+}
+.sound-btn:hover {
+	background-color: ligh;
+}
+
+/* On Top */
+
+.floater {
+	
+	background-color: #005689;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	position: fixed;
+	left: 0px;
+	right: 0px;
+	z-index: 9999;
+	border-radius: 100px;
+	overflow: hidden;
+	box-shadow: 0px 2px 4px rgba(0, 0, 0, .5);
+}
+
+.lowermenu {
+	bottom: 55px;
+	height: 35px;
+	width: 250px;
+}
+
+.lowermenubtn, .smallbtn, .barbtn {
+	
+	border-width: 0px;
+	height: 35px;
+	font-weight: bold;
+	background-color: #005689;
+	padding: 0px 20px 0px 20px;
+	display: inline-block;
+	vertical-align:top;
+    box-sizing: content-box;
+	color: white;
+	cursor: pointer;
+}
+
+.lowermenubtn:active {
+	background-color: white;
+	color: #005689;
+}
+
+.lowermenubtn:hover {
+	background-color: #0071b3;
+}
+
+.lowermenubtn:focus, .smallbtn:focus, .barbtn:focus {
+	outline: 0;
+}
+
+/* Read More Button */
+
+.readmorebtn {
+	background-color: white;
+	border: none;
+	font-size: 20px;
+	width: 100%;
+	color: rgba(0, 86, 137, 0.5);
+	border-top: 1px solid rgba(0, 86, 137, 0.5);
+	border-bottom: 1px solid rgba(0, 86, 137, 0.5);
+	padding: 10px 0px;
+	margin: 17px 0px;
+	margin-left:auto;
+	margin-right: auto;
+	cursor: pointer;
+	font-style: italic;
+}
+
+.readmorebtn:focus {
+	outline: 0;
+	background: none;
+}
+
+.readmorebtn:hover {
+	font-weight: bold;
+}
+
+.readmorebtn:active {
+	color: rgba(0, 86, 137, 0.5);
+	background: none;
+	outline: 0;
+	box-shadow: none;
+	border-top: 1px solid rgba(0, 86, 137, 0.5);
+	border-bottom: 1px solid rgba(0, 86, 137, 0.5);
+	
+}
+
+/* Sound Cards */
+
+.soundcard {
+	width: 260px;
+	min-height: 135px;
+	margin-bottom: 20px;
+	background-color: white;
+}
+
+.soundcard-title {
+	width: 260px;
+	height: 18px;
+	padding: 8px 0px 8px 0px;
+	
+	background-color: #005689;
+	color: white;
+	
+}
+
+.float-center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.soundcard-title-txt {
+	line-height: 18px;
+	font-size: 18px;
+	font-family: arial;
+	margin-left: 10px;
+	font-weight: bold;
+}
+
+.soundcard-content {
+	min-height: 90px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.soundcard-content-txt {
+	font-family: arial;
+	font-size: 12px;
+	
+}
+
+.soundcard-footer {
+	min-height: 15px;
+	width: 260px;
+	text-align: center;
+}
+
+.soundcard-btn {
+	width: 76px;
+	text-align: center;
+	margin: 5px 0px 5px 0px;
+	padding: 0px;
+}
+
+/* Pop-Up */
+
+.popup {
+    position:absolute;
+    top: -9px;
+    left:-12px;
+    background-color: rgba(255, 255, 255, 0.9);
+	padding: 0px 10px 0px 10px;
+	min-width: 130px;
+	margin: 0px;
+    visibility: hidden;
+	display: none;
+	opacity: 0;
+    transition: opacity 0.4s;
+	z-index: 999999;
+	border: #0375b4 solid 2px;
+	border-radius: 5px;
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+}
+
+.lowlight {
+	opacity: 0.6;
+}
+
+/* Cluster */
+
+.cluster {
+	cursor: pointer;
+	position: relative;
+	display: inline;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

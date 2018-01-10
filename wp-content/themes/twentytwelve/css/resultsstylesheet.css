@@ -1,0 +1,225 @@
+/* On-Top Stuff */
+
+#learnsection {
+	
+	padding-top: 50px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 99999;
+	display: none;
+}
+
+#blackscreen {
+	background-color: rgba(0,0,0,0.5);
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 99998;
+	display: none;
+}
+
+.top-right-x {
+	
+	color: white;
+	position: fixed;
+	background:none;
+	font-size: 50px;
+	top: 20px;
+	right: 30px;
+	border: none;
+	width: 50px;
+	height: 50px;
+	
+	
+}
+
+.top-right-x:focus {
+	outline: 0;
+}
+
+
+/* Titles */
+
+.section-title {
+	margin-bottom: 10px;
+	margin-left: 5px;
+	margin-top: 5px;
+	padding: 0px;
+	font-size: 22px;
+}
+
+.section-title i {
+	margin-right: 12px;
+}
+
+.section-desc {
+	margin-bottom: 10px;
+	font-size: 14px;
+	font-style: italic;
+	margin-left: 5px;
+	line-height: 16px;
+}
+
+/* Results */
+
+#container {
+	padding-bottom: 40px;
+}
+
+#top-target-text {
+	font-size: 20px;
+	color: #fd1d1d;
+	float: left;
+	text-transform: uppercase;
+	margin: 5px 5px 5px 0px;
+	display: block;
+}
+
+.section-container {
+	box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.4);
+	padding: 10px;
+	width: 540px;
+	margin: auto;
+	margin-bottom: 15px;
+	background-color: white;
+}
+
+.report-line {
+	font-weight: normal;
+	padding: 10px;
+	width: 520px;
+	display: block;
+	vertical-align: top;
+}
+
+.report-title, .report-desc {
+	
+	margin-right: 0px;
+	display: block;
+	
+}
+
+.report-title-txt {
+	font-size: 16px;
+	line-height: 16px;
+	margin: 0;
+	font-weight: bold;
+}
+
+.report-desc-txt {
+	font-style: italic;
+	font-size: 14px;
+	line-height: 14px;
+	margin: 0;
+	display: block;
+	font-weight: normal;
+}
+
+.last-practiced-txt {
+	font-size: 12px;
+	line-height: 15px;
+	text-transform: uppercase;
+	margin: 0px;
+}
+
+.report-title {
+	height: 16px;
+}
+
+/* Top-Target */
+
+#top-target {
+	
+	width: 640px;
+	height: 240px;
+	color: white;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	padding: 20px;
+	text-align: center;
+	z-index: 9999999;
+	vertical-align: middle;
+}
+
+#top-target-blackscreen {
+	position: fixed;
+	width: 100%;
+	z-index: 9999998;
+	height: 100%;
+	background-color: rgba(0,0,0,0.9);
+	top: 0px;
+	left: 0px;
+	display: none;
+}
+
+#top-target-txt {
+	color: white;
+	font-weight: normal;
+	font-size: 22px;
+	line-height: 30px;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+#top-target-btn {
+	text-align: center;
+	margin-top: 30px;
+	height: 42px;
+	border: 2px solid white;
+	border-radius: 4px;
+	padding: 5px 20px 5px 20px;
+	font-size: 14px;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: white;
+	background-color: #3c3c3c;
+}
+
+#top-target-btn:hover {
+	background-color: white;
+	color: #3c3c3c;
+	cursor: pointer;
+}
+
+/* Result Buttons */
+
+.report-button {
+	height: 30px;
+	float: right;
+	width: 80px;
+	display: block;
+	margin: 0px;
+	border: 0;
+	cursor: pointer;
+	margin-left: 10px;
+}
+
+#i-float-right {
+	font-size: 20px;
+	float: right;
+	color: #3c3c3c;
+	display: block;
+	margin: 5px;
+	margin-left: 10px;
+}
+
+.report-button:focus {
+	outline: 0;
+}
+
+.report-button:hover {
+	background-color: lightblue;
+}

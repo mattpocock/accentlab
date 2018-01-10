@@ -1,4 +1,0 @@
-W's and V's
-scanFor('W','V');
-All Vowels
-scanFor('AA', 'AE', 'OH');

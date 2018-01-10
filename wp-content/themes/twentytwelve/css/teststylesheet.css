@@ -1,0 +1,151 @@
+/* Container */
+
+#container {
+	
+	padding: 10px 30px 10px 30px;
+	margin: auto;
+	margin-bottom: 20px;
+	
+}
+
+/* Top Text */
+
+#question-txt {
+	
+	margin: 30px 0px 30px 0px;
+	font-size: 30px;
+	
+}
+
+#question-desc {
+	margin: 60px;
+	font-size: 20px;
+	line-height: 25px;
+}
+
+/* Test Options */
+
+.test-content-container {
+	display: block;
+	width: 720px;
+	margin: auto;
+	margin-bottom: 20px;
+	text-align: center;
+	
+}
+
+.test-option {
+	display: inline-block;
+	text-align: center;
+	border: 2px lightgray solid;
+	border-radius: 4px;
+	margin: 10px;
+	box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.3);
+}
+
+.test-option:hover {
+	border: 2px rgb(28,175,246) solid;
+}
+
+.play-button {
+	width: 140px;
+	margin: auto;
+	margin-top: 20px;
+}
+
+.play-button i {
+	font-size: 120px;
+	text-align: center;
+	display: block;
+	cursor: pointer;
+	color: #3c3c3c;
+}
+
+.play-button-btn:hover {
+	background-color: transparent;
+}
+
+.play-button-btn {
+	
+	background-color: transparent;
+	border: 0;
+	
+}
+
+.play-button-btn:focus {
+	outline: 0;
+}
+
+.play-button i:hover {
+	color: rgb(28,175,246);
+	background: none;
+	
+}
+
+.test-word-txt {
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.choose-btn {
+	text-align: center;
+	margin-bottom: 20px;
+	border: 2px solid lightgray;
+	border-radius: 4px;
+	padding: 5px 20px 5px 20px;
+	font-size: 14px;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: darkgray;
+	background: none;
+}
+
+.choose-btn:hover {
+	color: rgb(28,175,246);
+	border: 2px solid rgb(28,175,246);
+	cursor: pointer;
+}
+
+/* Progress Bar */
+
+#progress-bar-outer {
+	width: 700px;
+	background-color: lightgray;
+	margin: auto;
+	height: 4px;
+	border-radius: 100px;
+	overflow: hidden;
+}
+
+#progress-bar-inner {
+	width: 0px;
+	background-color: rgb(28,175,246);
+	height: 100%;
+}
+
+/* Bottom Bar */
+
+.bottom-bar {
+	
+	padding-top: 20px;
+	text-align: center;
+	
+}
+
+#percentage-txt {
+	display: block;
+	line-height: 26px;
+	height: 26px;
+	font-size: 26px;
+	width: 200px;
+}
+
+#complete-btn {
+	height: 50px;
+	padding: 5 20 5 20;
+	font-size: 20px;
+}
+
+#complete-btn:focus {
+	outline: 0;
+}

@@ -1,91 +1,182 @@
 <html>
 <head>
 <link rel="stylesheet" href="stylesheet.css">
+<link rel="stylesheet" href="jquery.powertip.css">
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+<div class="ontop">
+	
+	<div id="lowermenu" class="lowermenu floater">
+		<button class="lowermenubtn north" title="Go to the next article" onclick="newArticle();"><i class="fa fa-fast-forward" aria-hidden="true"></i></button>
+		<button class="lowermenubtn north" title="Practice with custom text" onclick="showBox();"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+		<button class="lowermenubtn north" title="Reset highlighted text" onclick="resetScans();"><i class="fa fa-undo" aria-hidden="true"></i></button>
+		<button class="lowermenubtn north" title="Search for a phoneme" onclick="showSearchBar();"><i class="fa fa-search" aria-hidden="true"></i></button>
+	</div>
+	
+	<div id="searchmenu" class="searchmenu floater">
+		<select id="formType">
+		<option value="cons">Consonant</option>
+		<option value="vowel">Vowel</option>
+		<option value="other">Other</option>
+		</select>
+		
+		<select id="formSound">
+		</select>
+		
+		<select id="formPosition">
+		<option value="any">Any Position</option>
+		<option value="start">At Start</option>
+		<option value="end">At End</option>
+		</select>
+		
+		<button id="formSubmit" class="lowermenubtn north" title="Search for phoneme in text" onclick="searchButtonPressed();"><i class="fa fa-search" aria-hidden="true"></i></button>
+		<button class="lowermenubtn north" title="Reset highlighted text" onclick="resetScans();"><i class="fa fa-undo" aria-hidden="true"></i></button>
+		<button id="formSubmit" class="lowermenubtn north" title="Close search bar" onclick="closeSearchBar();"><i class="fa fa-times" aria-hidden="true"></i></button>
+	</div>
+	
+	<div id="moreinfoscreen" class="doublesize floater">
+	
+		<div id="mi-screen1" class="doublesize-screen">
+	
+			<div class="mi-word">
+			<h3 id="mi-word-txt"></h3>
+			</div>
+			<div class="mi-phons">
+			<h3 id="mi-phons-txt"></h3>
+			</div>
+			
+			<button class="smallbtn" onclick="phonHighlighted--;highlightNewPhon();" id="phons-left-btn"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+			<button class="smallbtn" onclick="phonHighlighted++;highlightNewPhon();" id="phons-right-btn"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+			
+			<div class="mi-screen-btns">
+			<button class="barbtn" onclick="scanFor(phonInFocus);" id="mi-search-btn"><i class="fa fa-search" aria-hidden="true"></i></button>
+			<button class="barbtn" onclick="resetScans();"><i class="fa fa-undo" aria-hidden="true"></i></button>
+			<button class="barbtn north" id="mi-report-btn" title="Report inaccurate translation" onclick="reportWord(wholeWord);"><i class="fa fa-exclamation" aria-hidden="true"></i></button>
+			<button class="barbtn north" title="Toggle sound on and off" id="mi-sound-btn" onclick="toggleSound();"><i class="fa fa-volume-up" aria-hidden="true"></i></button>
+			</div>
+			
+		
+		</div>
+		
+		<!--<div id="mi-screen2" class="mi-screen">
+	
+			<div class="float-center">
+			<iframe id="mi-youtube-screen" width="290" height="165" frameborder="0" allowfullscreen></iframe>
+			</div>
+		
+		</div> -->
+		
+		<button class="smallbtn" onclick="closeMIScreen();" id="closemi-screen"><i class="fa fa-times" aria-hidden="true"></i></button>
+	
+	</div>
+	
+	<div id="presetsscreen" class="doublesize floater">
+	
+		<div class="doublesize-screen">
+		
+			<div id="presetslogin">
+			
+			<h3>Full Name</h3>
+			
+			<input type="text" id="presetsloginfullname"></input>
+			
+			<br><br><button onclick="loadPresets(document.getElementById('presetsloginfullname').value);">Load Presets</button>
+			
+			</div>
+			
+			<div id="presetsloaded"style="display:none;">
+			
+				<h3>Presets</h3>
+				
+				<div class="ps-center" >
+				<h3 id="mi-phons-txt">Preset One</h3>
+				</div>
+				
+				<button class="smallbtn" onclick="" id="phons-left-btn"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+				<button class="smallbtn" onclick="" id="phons-right-btn"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+				
+				<div class="mi-screen-btns">
+				<button class="barbtn" onclick="scanFor(phonInFocus);" id="mi-search-btn"><i class="fa fa-search" aria-hidden="true"></i></button>
+				<button class="barbtn" onclick="resetScans();"><i class="fa fa-undo" aria-hidden="true"></i></button>
+				<button class="barbtn north" id="mi-report-btn" title="Report inaccurate translation" onclick="reportWord(wholeWord);"><i class="fa fa-exclamation" aria-hidden="true"></i></button>
+				</div>
+			
+			</div>
+		
+		</div>
+		
+		<button class="smallbtn" onclick="closePSScreen();" id="closemi-screen"><i class="fa fa-times" aria-hidden="true"></i></button>
+		
+	
+	</div>
+	
+</div>
+	
 <div class="header">
 <div class="header-content">
-<div style="display:inline-block;">
-	<h1 class="title">Phonetic Translator</h1>
+<div class="title-div">
+	<h1 class="title">Accent Practice Tool</h1>
 </div>
-<div style="display:inline-block;">
+<div class="header-menu" style="float:right;margin-right: 17px;">
 
-	<select id="formType">
-	<option value="cons">Consonant</option>
-	<option value="vowel">Vowel</option>
-	<option value="other">Other</option>
-	</select>
 	
-	<select id="formSound">
-	</select>
-	
-	<select id="formPosition">
-	<option value="any">Any Position</option>
-	<option value="start">At Start</option>
-	<option value="end">At End</option>
-	</select>
-	
-	<button id="formSubmit" onclick="searchButtonPressed()">Search</button>
-	<button id="reset-btn" onclick="resetScans();">Reset</button>
+
 
 </div>
-<div style="display:inline-block;">
-<!--<p id="foundTxt" style="color:white; font-family: arial;"></p>-->
-</div>
 
+</div>
+</div>
+<div class="header-lower" style="display:none;">
+<div class="header-content">
+<p>Popular:</p>
+<p><a onclick="scanFor('TH', 'DH');return false;">All TH Sounds</a></p>
+<p><a onclick="vowelAfterScan('L');return false;">Light L Sounds</a></p>
+<p><a onclick="darkLScan('L');return false;">Dark L Sounds</a></p>
+<p><a onclick="nonRhoticScan('R');return false;">Dropped R's</a></p>
+<p><a onclick="atEndScan('NG')">'NG' At Ends</a></p>
+<p><a onclick='scanFor("EH","IH","UH","AH0", "ER0","AH1", "AH2", "AE");'>Short Vowels</a></p>
+<p><a onclick='scanFor("IY1", "IY2", "ER1", "ER2", "AA", "UW", "AO");'>Long Vowels</a></p>
+<p><a onclick='scanFor("AW", "OW", "AY", "EY", "OY");'>Diphthongs</a></p>
 </div>
 </div>
 
 <div class="container">
 
-<div id="input-div">
-	<textarea id="input-txt" style="width:700px;height:240px;" placeholder="Add any text to me - a news article, a monologue, or anything - then press 'Convert'."></textarea>
+<div id="input-div" class="full-width">
+	<textarea id="input-txt" style="width:960px;height:240px; display:none;" placeholder="Copy and paste some text into this box - a news article, a monologue, or anything you like. &#13;&#10;&#13;&#10;Or, press 'New Article' to use one of our pre-loaded practice texts. &#13;&#10;&#13;&#10;When you're ready to practice, press 'Convert'."></textarea>
 </div>
-<div id="btn-div" style="text-align: center;">
-	<button class="sound-btn" id="button" style="text-align: center;" onclick="onPush();">Convert</button>
+<div id="btn-div" style="text-align: center;" class="full-width">
+	<button class="sound-btn" id="convertBtn" style="text-align: center; display:none;" onclick="onPush(document.getElementById('input-txt').value, false);">Convert</button>
+	<button class="sound-btn" id="clearBtn" style="text-align: center; display:none;" onclick="clearBox();">Clear Box</button>
 </div>
-<!--
-<div id="btns-div">
-	<h2>Misc Sounds</h2>	
-	<button class="sound-btn" onclick="vowelAfterScan('L')">Light L Sounds</button>
-	<button class="sound-btn" onclick="darkLScan('L')">Dark L Sounds</button>
-	<button class="sound-btn" onclick="vowelAfterScan('R', 'ER0', 'ER1', 'ER2')">Voiced R Sounds</button>
-	<button class="sound-btn" onclick="nonRhoticScan('R')">Dropped R's</button>
-	<br>
-	<button class="sound-btn" onclick="scanFor('Y')">Y - /y/</button>
-	<button class="sound-btn" onclick="scanFor('W')">W - /w/</button>
-	<br>	
-	<h2>Instructions</h2>
-	<button class="sound-btn" onclick="scanFor('AE','AA','AY','AW')">Drop The Jaw</button>
-	<button class="sound-btn" onclick="scanFor('AH0','AH1','AH2','ER0','ER1','ER2','AA','IH','UH','OW')">Relaxed Lips</button>
-	<button class="sound-btn" onclick="atEndScan('IY0')">Unstressed /i/</button>
-	<button class="sound-btn" onclick="atEndScan('T')">/t/ Endings</button>
-	<button class="sound-btn" onclick="stRuleScan()">'ST' Rule</button>
-	
-	<h2>Custom</h2>
-	<input type="text" id="custom-txt"></input>
-	<button class="sound-btn" onclick="scanCustom()">Custom</button>
-	<button class="sound-btn" id="button" onclick="onPush();">Convert</button>
-	<button class="sound-btn" id="reset-btn" onclick="resetScans();">Reset</button>
-	<a href="http://www.speech.cs.cmu.edu/cgi-bin/cmudict" target="_blank">CMU Dictionary</a>
-	<h2>Accents</h2>
-	<button class="sound-btn" onclick="scanFor('ER1','ER2','OW','AE','AA','EY','AY','AH1','AH2');vowelAfterScan('L');vowelAfterScan('R');scanFor('NG','K','HH')">Liverpool</button>
-	<button class="sound-btn" onclick="scanFor('OW','EY','AY','AH1','AH2');scanFor('NG');scanFor('TH','DH', 'HH');darkLScan('L');">Birmingham</button>
-	<button class="sound-btn" onclick="scanFor('EY','AY','AW','OW');atEndScan('NG');atEndScan('T');scanFor('TH','DH','HH');darkLScan('L');">Cockney</button>
-	<button class="sound-btn" onclick="scanFor('AE','AA','AO','AW','OW');atEndScan('T');nonRhoticScan('R');vowelAfterScan('L');">General American</button>
-	<button class="sound-btn" onclick="atEndScan('T');atEndScan('D');atEndScan('P');atEndScan('B');atEndScan('K');atEndScan('G');">Plosive Endings</button>
-	<button class="sound-btn" onclick="atEndScan('F');atEndScan('V');">F and V Endings</button>
-
-</div>
--->
-<div id="output-div">
+<div id="output-div" class="full-width">
+	<h1 id="txt-title">Practice Article</h1>
 	<p id="output-txt"></p>
+</div>
+<div id="btn-div" style="text-align: center; margin-bottom: 110px;" class="full-width">
+	<button class="readmorebtn" id="readmorebtn" style="text-align: center;display:none;" onclick="onPush(readMoreText, true);">Read More</button>
+	<button class="readmorebtn" id="lowernewarticlebtn" style="text-align: center; display: none;" onclick="newArticle();">New Article</button>
 </div>
 
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://use.fontawesome.com/2adec87542.js"></script>
 <script src="main.js"></script>
+<script src="articleworker.js"></script>
+<script src="lowermenu.js"></script>
+<script src="dimensions.js"></script>
+<script src="soundmenu.js"></script>
+<script src="report.js"></script>
+<script src="presets.js"></script>
+<script src="jquery.powertip.js"></script>
+<script type="text/javascript">
+		$(function() {
+			// placement examples
+			$('.north').powerTip({ placement: 'n' });
+		});
+	</script>
 </body>
 </html>

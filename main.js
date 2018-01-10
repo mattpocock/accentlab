@@ -1,147 +1,80 @@
+// OPTIONS
+
+var cmellonloc = 'cmellon.txt';
+var poploc = 'popwords.txt';
+
 var cmellontxt;
+var popWordstxt;
 
 var allWordData = [];
-var noTransWords = [];
 var fullWordTranslations = [];
 var phonComparisons = [];
 var allClusterData = [];
 var colors = ["#ffea74", "#d374ff", "#ff749b","#a0ff74", "#9074ff", "#74c7ff", "#ffa778"];
 var colorcount = 0;
 var paragraphs = [];
-var popped;
+var popped = false;
+var prevLength = 0;
 
-var consOptions = ["Fricatives", "TH - Think", "TH - This","All TH Sounds","/s/ - See", "/z/ - Is", "/f/ - Few", "/v/ - View", "/h/ - How", "SH - Show", "ZH - Measure","Plosives","/p/ - Pie", "/b/ - Buy", "/t/ - Tie", "/d/ - Dye", "/k/ - Kite", "/g/ - Guy", "Affricates", "CH - Chin", "J - Joke", "Nasals","/m/ - May", "/n/ - No", "NG - Sing", "Approximants","Light L", "Dark L", "All L's", "All R Sounds", "Dropped R's", "Y - You", "W - Why"];
-var vowelOptions = ["Short Vowels", "EH - Set", "Ih - Sit", "Ooh - Soot", "Uh - Shut", "The Schwa", "Long Vowels","Ee - See", "Oo - Sue", "Er - Sir", "Diphthongs", "Ay - Say", "I - Sigh", "Ow - Sound", "O - So", "Oy - Soy"];
-var otherOptions = ["??"];
+var readMoreText = "";
+var paragraphTicker, paragraphInterval = 5;
 
-var onPush = function() {
+
+var currentFuncList = "";
+
+var consOptions = ["Fricatives", "/&#952/ - Think", "/&#240/ - This","All TH Sounds","/s/ - See", "/z/ - Is", "/f/ - Few", "/v/ - View", "/h/ - How", "/&#643/ - Show", "/&#658/ - Measure","Plosives","/p/ - Pie", "/b/ - Buy", "/t/ - Tie", "/d/ - Dye", "/k/ - Kite", "/g/ - Guy", "Affricates", "/t&#643/ - Chin", "/&#676/ - Joke", "Nasals","/m/ - May", "/n/ - No", "/&#331/ - Sing", "Approximants","Light L", "Dark L", "All L's", "All R Sounds", "Dropped R's", "Voiced R's", "/j/ - You", "/w/ - Why"];
+var vowelOptions = ["Short Vowels", "/e/ - Set", "/&#618/ - Sit", "/&#650/ - Soot", "/&#652/ - Shut", "/&#601/ - Schwa", "/&#230/ - Sat","/&#594/ - Soft", "Long Vowels","/&#593&#720/ - Start","/i&#720/ - See", "/u&#720/ - Sue", "/&#604&#720/ - Sir", "/&#596&#720/ - Sore","Diphthongs", "/e&#618/ - Say", "/a&#618/ - Sigh", "/a&#650/ - Sound", "/&#601&#650/ - So", "/&#596&#618/ - Soy"];
+var vowelMenuSounds = [["EH","IH","UH","AH0","ER0","AH1","AH2","AE","OH"],"EH","IH","UH",["AH1","AH2"],["AH0","ER0"],"AE","OH",["IY1","IY2","ER1","ER2","AA","UW","AO"],"AA",["IY1","IY2"],"UW",["ER1","ER2"],"AO",["AW","OW","AY","EY","OY"],"EY","AY","AW","OW","OY"];
+var otherOptions = ["ST Rule","Linking Words","Open Jaw"];
+
+var onPush = function(input, readMore) {
 	
-	allWordData = [];
 	colorcount = 0;
-	paragraphs = [];
-	fullWordTranslations = [];
 	
-	var input = document.getElementById("input-txt").value;
+	if (!readMore) {
+		
+		var out = document.getElementById("output-txt"); // Clears output text
+		out.innerHTML = "";
+		$('#readmorebtn').css('display', 'inline-block');
+		prevLength = 0;
+		phonComparisons = [];
+		fullWordTranslations = [];
+		allWordData = [];
+		allClusterData = [];
+		$('#lowernewarticlebtn').css('display', 'none');
+		paragraphs = [];
+		paragraphTicker = paragraphInterval;
+	}
+
+	var prevParas = paragraphs.length;
 	
-	$("#input-txt").animate({height:'60'}, 800);
-	
-	
+	readMoreText = "";
 	
 	var inputArr = [];
 	
-	var word = "";
+	inputArr = breakDownText(input); // Breaks down text into individual words, ready for searching
 	
-	// BREAKS DOWN THE INPUT INTO INDIVIDUAL WORDS, PUTS THEM INTO INPUTARR[]
-	
-	for (var i = 0; i < input.length; i++) {
-		
-		var l = input.charAt(i);
-		
-		if (l == " ") {
-			
-			if (word !== "") { // Checks if it's not empty before clipping and pushing to array
-				word+= l;
-				inputArr.push(word);
-				word = "";
-			}
-			
-		} else if (l == "\n") {
-			
-			if (word != "") {
-			
-				word+= l;
-				inputArr.push(word);
-				word = "";
-				
-			}
-			
-			paragraphs.push(inputArr.length);
-			inputArr.push("");
-		} else { // Only thing left for it to be is a letter
-			word += l;
-		}
+	if (readMoreText == "") {
+		$('#readmorebtn').css('display', 'none');
+		$('#lowernewarticlebtn').css('display', 'inline-block');
 		
 	}
 	
-	if (word !== "") {
-				inputArr.push(word);
-				word = "";
-			}
-			
-	// BY THIS TIME, INPUTARR CONTAINS ALL WORDS AND ALL PUNCTUATION
+	//var out = document.getElementById("output-txt"); // Clears output text
 	
-	noTransWords = [];
+	//$('#output-txt').css('opacity', '0');
+	//out.innerHTML = "";
 	
-	noTransWords = inputArr;
+	var arrToAdd = searchInDictionary(inputArr);
+	
+	allWordData = allWordData.concat(arrToAdd);
 	
 	
-	var out = document.getElementById("output-txt"); // Clears output text
 	
-	$('#output-txt').css('opacity', '0');
-	out.innerHTML = "";
-	
-	
-	for (var i = 0; i < inputArr.length; i++) {
-		
-		
-		/*if (i == paragraphs[paraCounter]) {
-			
-			$( "#output-txt" ).append("<br><br><a></a>");
-			allWordData.push("");
-			paraCounter++;
-			
-		} else { */
-		
-			// CLEANS UP THE WORD READY FOR SEARCHING
-			
-			var cleanedResult = "";
-			
-			for (var s = 0; s < inputArr[i].length; s++) {
-				
-				var l = inputArr[i].charAt(s);
-				
-				if (l == "\"" || l == "\'" || l == "\n" || l == "\r\n" || l == "“" || l == "\“" || l == "\”" || l == "\’" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")") {
-					
-				} else {
-					cleanedResult += l;
-				}
-				
-			}
-				
-			// SEARCHES THE WORD IN THE DICTIONARY
-			
-			var loc = cmellontxt.search("\n" + cleanedResult.toUpperCase() + "  ");
-			
-			var result = "";
-			
-			if (loc > -1) {
-				
-				var l = "";
-				var counter = 0;
-				var startloc = loc + cleanedResult.length + 2;
-				
-				while (l != ";") {
-					l = cmellontxt.charAt(startloc+counter);
-					result += l;
-					counter++;
-				}
-			
-			} else {
-				result = "NF";
-			}
-			
-			// CONVERTS WHOLE STRING TO PHONETICS
-			
-			result = mellonToPhonetics(result);
-			
-			fullWordTranslations.push(result);
-			
-	
-	}
 	
 	// Clusters
 	
-	allClusterData = [];
+	
 	
 	function cluster (type, chars) {
     this.type = type;
@@ -149,16 +82,16 @@ var onPush = function() {
 	}
 	
 	
-	for (var i = 0; i < noTransWords.length; i++) { // Works out Letters for Clusters
+	for (var i = 0; i < inputArr.length; i++) { // Works out Letters for Clusters
 		
 		var toInput = [];
 		var prevType = "start";
 		var chars = "";
 		var type = "";
 		
-		for (var j = 0; j < noTransWords[i].length; j++) {
+		for (var j = 0; j < inputArr[i].length; j++) {
 			
-			var l = noTransWords[i][j];
+			var l = inputArr[i][j];
 			
 			if (l == "a" || l == "e" || l == "i" || l == "o" || l == "u" || l == "A" || l == "E" || l == "I" || l == "O" || l == "U" || l == "y" || l == "Y") {
 				
@@ -203,7 +136,7 @@ var onPush = function() {
 				}
 			}
 			
-			if (j == noTransWords[i].length - 1) {
+			if (j == inputArr[i].length - 1) {
 				toInput.push(new cluster(type, chars));
 			}
 			
@@ -216,7 +149,7 @@ var onPush = function() {
 	}
 	
 	
-	phonComparisons = [];
+	
 	
 	function comparison (phons, letters) {
     this.phons = phons;
@@ -225,7 +158,7 @@ var onPush = function() {
 	
 	// Compare allClusterData to allWordData
 	
-	for (var i = 0; i < allClusterData.length; i++) { // Repeats Each Word
+	for (var i = prevLength; i < allWordData.length; i++) { // Repeats Each Word
 		
 		var phons = [];
 		var letters = [];
@@ -286,21 +219,20 @@ var onPush = function() {
 		
 		
 	}
-	
-	
+
 	
 	// Prints to Page
 	
-	var paraCounter = 0;
+	
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	for (var i = 0; i < allWordData.length; i++) {
+	for (var i = prevLength; i < allWordData.length; i++) {
 		
-		if (i == paragraphs[paraCounter]+1) {
+		if (i == paragraphs[prevParas]+1) {
 			
 			$( "#output-txt" ).append("<br><br><a></a>");
-			paraCounter++;
+			prevParas++;
 			i--;
 			
 		} else {
@@ -314,24 +246,27 @@ var onPush = function() {
 			var phonsToAdd = "";
 			var found = false;
 			
-			for (var k = 0; k < phonComparisons[i].phons[j].length; k++) {phonsToAdd+= convert(phonComparisons[i].phons[j][k])};
+			for (var k = 0; k < phonComparisons[i].phons[j].length; k++) {
+				phonsToAdd+= convert(phonComparisons[i].phons[j][k])
+			};
 			
 			if (phonsToAdd == "" && !found) {
 				phonsToAdd = "not found";
 			} else if (phonsToAdd == ""){
 				phonsToAdd = "silent";
 			}
-		
 			
 			var buttonFunc = "scanFor('"+ phonComparisons[i].phons[j][0] + "')";
-			var buttonFunc2 = "sayWord(phonComparisons["+i+"])";
+			var buttonFunc2 = 'popDown('+i+','+j+');';
 			var buttonFunc3 = "resetScans();";
 			
-			insideDiv += '<div class="cluster" onClick="popUp('+i+','+j+');"id="cluster'+i+'-'+j+'" onclick="highlight('+ i + ',' + j +')"><div class="popup" onmouseleave="popDown('+i+','+j+');" id="popup'+i+'-'+j+'">'+ allClusterData[i][j].chars + ' - /' + phonsToAdd + '/<br><button class="sound-btn" onclick='+ buttonFunc +'>Find All</button><button class="sound-btn" onclick='+ buttonFunc3 +'>Reset</button><button class="sound-btn" onclick='+ buttonFunc2 +'>Say Whole Word</button></div>' + allClusterData[i][j].chars + '</div>';
+			//<div class="popup" onfocusout="popDown('+prev+','+j+')" onmouseleave="popDown('+prev+','+j+')" id="popup'+prev+'-'+j+'">'+ allClusterData[i][j].chars + ' - /' + phonsToAdd + '/<br><button class="sound-btn" onclick='+ buttonFunc +'><i class="fa fa-search" aria-hidden="true"></i></button><button class="sound-btn" onclick='+ buttonFunc3 +'><i class="fa fa-undo" aria-hidden="true"></i></button></div>
+			
+			insideDiv += '<div class="cluster" onClick="popUp('+i+','+j+');" id="cluster'+i+'-'+j+'">' + allClusterData[i][j].chars + '</div>';
 			
 		}
 		
-		var toInsert = $('<span id="word' + i + '">' + insideDiv + '</span>');
+		var toInsert = $('<span id="word' + i + '">' + insideDiv + '</span>')
 			
 		$( "#output-txt" ).append(toInsert);
 		
@@ -341,25 +276,168 @@ var onPush = function() {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	$('#output-txt').animate({opacity: 1}, 1000);
-
 	
+	var p = currentFuncList;
+	eval(currentFuncList);
+	currentFuncList = p;
 	
-	
-	//TODO: Work on detecting silent vowels
-	
-	
+	prevLength = allWordData.length;
 	
 	
 	
 }
 
-var scanCustom = function() {
+var breakDownText = function(input) {
 	
-	var sym = $('#custom-txt').val().toUpperCase();
-	scanFor(sym);
+	var word = "";
 	
-	$('#custom-txt').val('');
+	var inputArr = [];
+	
+	
+	// BREAKS DOWN THE INPUT INTO INDIVIDUAL WORDS, PUTS THEM INTO INPUTARR[]
+	
+	for (var i = 0; i < input.length; i++) {
+		
+		var l = input.charAt(i);
+		
+		if (l == " ") {
+			
+			if (word !== "") { // Checks if it's not empty before clipping and pushing to array
+				word+= l;
+				inputArr.push(word);
+				word = "";
+			}
+			
+		} else if (l == "\n") {
+			
+			if (word != "") {
+			
+				word+= l;
+				inputArr.push(word);
+				word = "";
+				
+			}
+			
+			paragraphs.push(inputArr.length+prevLength);
+			inputArr.push("");
+		} else { // Only thing left for it to be is a letter
+			word += l;
+		}
+		
+		// CLIP THE LENGTH EVERY 5 PARAGRAPHS AND ADD TO INPUTARR
+		
+		if (paragraphs.length > paragraphTicker-1) {
+			
+			readMoreText = input.slice(i, input.length);
+			paragraphTicker+=paragraphInterval;
+			
+			
+			break;
+			
+		}
+		
+	}
+	
+	// I ASSUME THIS SORTS OUT THE LAST WORD ISSUES
+	
+	if (word !== "") {
+				inputArr.push(word);
+				word = "";
+			}
+			
+	// BY THIS TIME, INPUTARR CONTAINS ALL WORDS AND ALL PUNCTUATION
+	
+	return inputArr;
+		
 }
+
+var searchInDictionary = function(inputArr) {
+		
+		var arrayToSend = [];
+	
+		for (var i = 0; i < inputArr.length; i++) {
+			
+				// CLEANS UP THE WORD READY FOR SEARCHING
+				
+				var cleanedResult = "";
+				
+				for (var s = 0; s < inputArr[i].length; s++) {
+					
+					var l = inputArr[i].charAt(s);
+					
+					if (l == "\"" || l == "\'" || l == "\n" || l == "\r\n" || l == "\r" || l == "“" || l == "\“" || l == "\”" || l == "\’" || l == "-" || l == " " || l == ";" || l == "," || l == "." || l == ":" || l == "!" || l == "?" || l == "\'" || l == "(" || l == ")") {
+						
+					} else {
+						cleanedResult += l;
+					}
+					
+				}
+					
+				// SEARCHES THE WORD IN THE DICTIONARY
+				
+				var loc = popWordstxt.search("\n" + cleanedResult.toUpperCase() + "  ");
+				
+				var result = "";
+				
+				if (loc > -1) {
+					
+					var l = "";
+					var counter = 0;
+					var startloc = loc + cleanedResult.length + 2;
+					
+					while (l != ";") {
+						l = popWordstxt.charAt(startloc+counter);
+						result += l;
+						counter++;
+					}
+				
+				} else {
+					result = "NF";
+				}
+				
+				if (result == "NF") {
+					
+				
+				
+				var loc = cmellontxt.search("\n" + cleanedResult.toUpperCase() + "  ");
+				
+				var result = "";
+				
+				if (loc > -1) {
+					
+					var l = "";
+					var counter = 0;
+					var startloc = loc + cleanedResult.length + 2;
+					
+					while (l != ";") {
+						l = cmellontxt.charAt(startloc+counter);
+						result += l;
+						counter++;
+					}
+					
+				} else {
+						result = "NF";
+					}
+				
+				}
+				
+				// CONVERTS WHOLE STRING TO PHONETICS
+				
+				
+				
+				var t = mellonToPhonetics(result);
+				
+				fullWordTranslations.push(t[0]);
+				arrayToSend.push(t[1]);
+				
+				
+				
+		
+		}
+		
+		return arrayToSend;
+	
+	}
 
 var mellonToPhonetics = function(str) {
 	
@@ -368,8 +446,7 @@ var mellonToPhonetics = function(str) {
 	var l;
 	var sym = "";
 	
-	// This function also sends the data to the main allWordData[]
-	
+	var tempArr = [];
 	var arrayToSend = [];
 	
 	// Preps
@@ -379,11 +456,11 @@ var mellonToPhonetics = function(str) {
 		l = str.charAt(i);
 		
 		if (l == " ") {
-			arrayToSend.push(sym);
+			tempArr.push(sym);
 			res += convert(sym);
 			sym = "";
 		} else if (l == ";") {
-			arrayToSend.push(sym);
+			tempArr.push(sym);
 			res += convert(sym);
 			sym = "";
 		} else if (!isNaN(parseInt(l))) { // Checks if it's a number - THIS IS THE THING TO CHANGE TO REGISTER EMPHASIS
@@ -400,9 +477,7 @@ var mellonToPhonetics = function(str) {
 		res = "not found";
 	}
 	
-	allWordData.push(arrayToSend);
-	
-	return "/" + res + "/";
+	return ["/" + res + "/", tempArr]; //returns the full word translated to phonetics, and also the part ready to be pushed to fullWordTranslations[];
 	
 }
 
@@ -440,7 +515,11 @@ var convert = function(sym) {
 		break;
 	case "AO":
         res = "&#596&#720";
-        break;	
+        break;
+		
+	case "OH":
+		res = "&#594";
+		break;
 		
 	case "AW":
         res = "a&#650";
@@ -465,13 +544,13 @@ var convert = function(sym) {
         res = "e";
         break;
 	case "ER0":
-        res = "&#601r";
+        res = "&#601";
         break;
 	case "ER1":
-        res = "&#604r";
+        res = "&#604&#720";
         break;
 	case "ER2":
-        res = "&#604r";
+        res = "&#604&#720";
         break;
 	case "EY":
         res = "e&#618";
@@ -572,7 +651,46 @@ var changeColour = function(i,p,color) {
 	$( "#cluster" + i + "-" + p ).css({"background-color": color});
 }
 
+var scanVowels = function() {
+	var found = false;
+	var numberFound = 0;
+	
+	for (var i = 0; i < phonComparisons.length; i++) {
+		
+		for (var p = 0; p < phonComparisons[i].phons.length; p++) {
+			
+			for (var q = 0; q < phonComparisons[i].phons[p].length; q++) {
+			
+				if (checkIfVowel(phonComparisons[i].phons[p][q])) {
+					
+					changeColour(i,p,colors[colorcount]);
+				
+				found = true;
+				numberFound++;
+				
+				}
+			
+			}
+			
+		}
+		
+	}
+	
+	//TODO: Do REVERSE
+	if (found) {colorcount++;};
+	
+	
+	
+}
+
+// ALL SCANS
+
 var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9, sym10) {
+	
+	if (sym != "") {
+	
+	currentFuncList += "scanFor('" + sym + "', '" + sym2 + "', '" + sym3 + "', '" + sym4 + "', '" + sym5 + "', '" + sym6 + "', '" + sym7 + "', '" + sym8 + "', '" + sym9 + "', '" + sym10 + "');";
+	
 	var found = false;
 	var numberFound = 0;
 	
@@ -602,11 +720,45 @@ var scanFor = function(sym, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9, sym1
 	//TODO: Do REVERSE
 	if (found) {colorcount++;};
 	
-	var ft = document.getElementById("foundTxt");
-	ft.innerHTML = numberFound + " found!";
+	}
+}
+
+var scanVowelsAtStart = function() {
+	
+	currentFuncList += "scanVowelsAtStart();";
+	
+	var found = false;
+	var numberFound = 0;
+	
+	for (var i = 0; i < phonComparisons.length; i++) {
+		
+		for (var p = 0; p < phonComparisons[i].phons.length; p++) {
+			
+			for (var q = 0; q < phonComparisons[i].phons[p].length; q++) {
+			
+				if (checkIfVowel(phonComparisons[i].phons[p][q]) && p == 0) {
+					
+					changeColour(i,p,colors[colorcount]);
+				
+				found = true;
+				numberFound++;
+				
+				}
+			
+			}
+			
+		}
+		
+	}
+	
+	//TODO: Do REVERSE
+	if (found) {colorcount++;};
+	
 }
 
 var nonRhoticScan = function(sym) {
+	
+	currentFuncList += "nonRhoticScan('"+sym+"');";
 	
 	var found = false;
 	
@@ -645,6 +797,8 @@ var nonRhoticScan = function(sym) {
 
 var vowelAfterScan = function(sym) {
 	
+	currentFuncList += "vowelAfterScan('" + sym + "');";
+	
 	var found = false;
 	
 	for (var i = 0; i < phonComparisons.length; i++) {
@@ -675,6 +829,8 @@ var vowelAfterScan = function(sym) {
 }
 
 var stRuleScan = function() {
+	
+	currentFuncList += "stRuleScan();";
 	
 	var found = false;
 	
@@ -762,7 +918,9 @@ var checkIfUnvoiPlo = function(sym) {
 	return res;
 }
 
-var atEndScan = function(sym) {
+var atEndScan = function(sym1, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9, sym10) {
+	
+	currentFuncList += "atEndScan('" + sym1 + "', '" + sym2 + "', '" + sym3 + "', '" + sym4 + "', '" + sym5 + "', '" + sym6 + "', '" + sym7 + "', '" + sym8 + "', '" + sym9 + "', '" + sym10 + "');";
 	
 	var numberFound = 0;
 	
@@ -774,7 +932,7 @@ var atEndScan = function(sym) {
 			
 			for (var j = 0; j < phonComparisons[i].phons[p].length; j++) {
 				
-				if (phonComparisons[i].phons[p][j] == sym) {
+				if (phonComparisons[i].phons[p][j] == sym1 || phonComparisons[i].phons[p][j] == sym2 || phonComparisons[i].phons[p][j] == sym3 || phonComparisons[i].phons[p][j] == sym4 || phonComparisons[i].phons[p][j] == sym5 || phonComparisons[i].phons[p][j] == sym6 || phonComparisons[i].phons[p][j] == sym7 || phonComparisons[i].phons[p][j] == sym8 || phonComparisons[i].phons[p][j] == sym9 || phonComparisons[i].phons[p][j] == sym10) {
 								
 					if (phonComparisons[i].phons[p][j+1] == null && phonComparisons[i].phons[p+1] == "") {
 						changeColour(i,phonComparisons[i].letters.length-2,colors[colorcount]);
@@ -795,12 +953,11 @@ var atEndScan = function(sym) {
 	//TODO: Do REVERSE
 	if (found) {colorcount++;};
 	
-	var ft = document.getElementById("foundTxt");
-	ft.innerHTML = numberFound + " found!";
-	
 }
 
 var darkLScan = function(sym) {
+	
+	currentFuncList += "darkLScan('" + sym + "');";
 	
 	var numberFound = 0;
 	
@@ -837,8 +994,6 @@ var darkLScan = function(sym) {
 	
 	if (found) {colorcount++;};
 	
-	var ft = document.getElementById("foundTxt");
-	ft.innerHTML = numberFound + " found!";
 	
 }
 
@@ -868,7 +1023,11 @@ var checkIfVowel = function(sym) {
 		break;
 	case "AO":
         res = true;
-        break;	
+        break;
+	
+	case "OH":
+		res = true;
+		break;
 		
 	case "AW":
         res = true;
@@ -912,7 +1071,7 @@ var checkIfVowel = function(sym) {
         res = false;
         break;
 	case "HH":
-        res = true;
+        res = false;
         break;
 	case "IH":
         res = true;
@@ -1004,9 +1163,9 @@ var resetScans = function() {
 	
 	colorcount = 0;
 	
-	for (var i = 0; i < allWordData.length; i++) {
+	for (var i = 0; i < phonComparisons.length; i++) {
 		
-		for (var j = 0; j < allClusterData[i].length; j++) {
+		for (var j = 0; j < phonComparisons[i].letters.length; j++) {
 		
 			$( "#cluster" + i + "-" + j ).css({"background-color": "transparent"});
 		
@@ -1014,8 +1173,25 @@ var resetScans = function() {
 		
 	}
 	
-	var ft = document.getElementById("foundTxt");
-	ft.innerHTML = "";
+	for (var i = currentFuncList.length-2; i > -1; i--) {
+		
+		var c = currentFuncList.charAt(i);
+		
+		if (c == ";") {
+			currentFuncList = currentFuncList.slice(0, i+1);
+
+			break;
+		} else if (i == 0) {
+			currentFuncList = "";
+		}
+		
+	}
+	
+	
+	
+	var p = currentFuncList;
+	eval(currentFuncList);
+	currentFuncList = p;
 
 }
 
@@ -1029,13 +1205,9 @@ var sayWord = function (arr) {
 	
 	var audioArr = [];
 	
-	console.log(arr);
-	
 	for (var j = 0; j < arr.phons.length; j++) {
 		audioArr[j] = new Audio(getAudio(arr.phons[j][0]));
 	}
-	
-	console.log(audioArr);
 	
 	for (var j = 0; j < audioArr.length-1; j++) {
 		var next = j+1;
@@ -1053,26 +1225,13 @@ var sayWord = function (arr) {
 	
 }
 
-var popUp = function(i, j) {
-	
-	if (!popped) {
-	
-	$( "#popup" + i + "-" + j ).css({"visibility": "visible", "display": "block","opacity": 1});
-		
-	var audio = new Audio(getAudio(phonComparisons[i].phons[j][0]));
-	audio.play();
-	console.log("firing!");
-	
-	popped = true;
-	
-	};
-	
-}
+
 
 var popDown = function (i, j) {
 	
-	$( "#popup" + i + "-" + j ).css({"visibility": "hidden","display": "none", "opacity": 0});
-	popped = false;
+		
+		
+		
 	
 }
 
@@ -1103,6 +1262,10 @@ var getAudio = function (sym) {
 	case "AO":
         res = "sounds/or.mp3";
         break;	
+		
+	case "OH":
+		res = "sounds/oh.mp3";
+		break;
 		
 	case "AW":
         res = "sounds/ow.mp3";
@@ -1258,9 +1421,8 @@ var switchSoundList = function (txt) {
 	
 	for (var i = 0; i < arr.length; i++) {
 		
-		if (arr[i] == "Fricatives" || arr[i] == "Plosives" || arr[i] == "Affricates" || arr[i] == "Nasals" || arr[i] == "Approximants" || arr[i] == "Short Vowels" || arr[i] == "Long Vowels" || arr[i] == "Diphthongs") {
+		if (arr[i] == "All Vowels" || arr[i] == "Fricatives" || arr[i] == "Plosives" || arr[i] == "Affricates" || arr[i] == "Nasals" || arr[i] == "Approximants" || arr[i] == "Short Vowels" || arr[i] == "Long Vowels" || arr[i] == "Diphthongs") {
 			$('#formSound').append('<option style="background-color: #005689; color:white;">' + arr[i] + '</option>');
-			console.log("strong");
 		} else {
 			$('#formSound').append('<option>' + arr[i] + '</option>');
 		}
@@ -1272,36 +1434,44 @@ var switchSoundList = function (txt) {
 var searchButtonPressed = function () {
 	
 	var sound = $('#formSound').find(":selected").text();
+	var index = $('#formSound').prop('selectedIndex');
+	var type = $('#formType').find(":selected").text();
 	var pos = $('#formPosition').find(":selected").text();
 	
 	var exception = checkExceptions(sound);
 	
-	
-	
 	if (!exception) {
 		
-	
-		var t = menuToSound(sound);
+		var t ;
 		
-		var sym1, sym2, sym3, sym4, sym5, sym6;
+		if (type == "Consonant") {
+			t = consonantMenu(sound, index);
+		} else if (type == "Vowel") {
+			t = vowelMenuSounds[index];
+		}
+		
+		var sym1, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9, sym10;
 		if (t.constructor === Array) {
-			console.log("it's an array!")
 			sym1 = t[0];
 			sym2 = t[1];
 			sym3 = t[2];
 			sym4 = t[3];
 			sym5 = t[4];
 			sym6 = t[5];
+			sym7 = t[6];
+			sym8 = t[7];
+			sym9 = t[8];
+			sym10 = t[9];
 		} else {
 			sym1 = t;
 		}
 	
 		if (pos == "Any Position") {
-			scanFor(sym1, sym2, sym3, sym4, sym5, sym6);
+			scanFor(sym1, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9, sym10);
 		} else if (pos == "At Start") {
 			alert("Scanning at Start is not quite coded yet.");
 		} else {
-			atEndScan(sym1);
+			atEndScan(sym1, sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9, sym10);
 		}
 	}
 	
@@ -1322,7 +1492,32 @@ var checkExceptions = function(txt) {
 		break;
 		
 		case "Dropped R's":
+		nonRhoticScan('R');
+		res = true;
+		break;
+		
+		case "Voiced R's":
 		vowelAfterScan('R', 'ER0', 'ER1', 'ER2');
+		res = true;
+		break;
+		
+		case "All Vowels":
+		scanVowelsAtStart();
+		res = true;
+		break;
+		
+		case "ST Rule":
+		stRuleScan();
+		res = true;
+		break;
+		
+		case "Open Jaw":
+		scanFor("AA","AE","OH","AW");
+		res = true;
+		break;
+		
+		case "Linking Words":
+		scanVowelsAtStart();
 		res = true;
 		break;
 		
@@ -1334,166 +1529,118 @@ var checkExceptions = function(txt) {
 	return res;
 }
 
-var menuToSound = function(txt) {
+var consonantMenu = function(txt, index) {
 	
 	var res;
 	
-	switch (txt) {
+	switch (index) {
 		
-		case "TH - Think":
+		case 0:
+		res = ["F", "V","TH", "DH", "S", "Z", "HH", "SH", "ZH"];
+		break;
+		
+		case 1:
 		res = "TH";
 		break;
 		
-		case "TH - This":
+		case 2:
 		res = "DH";
 		break; 
 		
-		case "All TH Sounds":
+		case 3:
 		res = ["TH", "DH"];
 		break;
 		
-		case "/s/ - See":
+		case 4:
 		res = "S";
 		break;
 		
-		case "/z/ - Is":
+		case 5:
 		res = "Z";
 		break;
 		
-		case "/f/ - Few":
+		case 6:
 		res = "F";
 		break;
 		
-		case "/v/ - View":
+		case 7:
 		res = "V";
 		break;
 		
-		case "/h/ - How":
+		case 8:
 		res = "HH";
 		break;
 		
-		case "SH - Show":
+		case 9:
 		res = "SH";
 		break;
 		
-		case "ZH - Measure":
+		case 10:
 		res = "ZH";
 		break;
 		
-		case "/p/ - Pie":
+		case 11:
+		res = ["P", "B","T", "D", "K", "G"];
+		break;
+		
+		case 12:
 		res = "P";
 		break;
 		
-		case "/b/ - Buy":
+		case 13:
 		res = "B";
 		break;
 		
-		case "/t/ - Tie":
+		case 14:
 		res = "T";
 		break;
 		
-		case "/d/ - Dye":
+		case 15:
 		res = "D";
 		break;
 		
-		case "/k/ - Kite":
+		case 16:
 		res = "K";
 		break;
 		
-		case "/g/ - Guy":
+		case 17:
 		res = "G";
 		break;
 		
-		case "CH - Chin":
+		case 19:
 		res = "CH";
 		break;
 		
-		case "J - Joke":
+		case 20:
 		res = "JH";
 		break;
 		
-		case "/m/ - May":
+		case 22:
 		res = "M";
 		break;
 		
-		case "/n/ - No":
+		case 23:
 		res = "N";
 		break;
 		
-		case "NG - Sing":
+		case 24:
 		res = "NG";
 		break;
 		
-		case "Y - You":
+		case 32:
 		res = "Y";
 		break;
 		
-		case "W - Why":
+		case 33:
 		res = "W";
 		break;
 		
-		case "All R Sounds":
+		case 29:
 		res = "R";
 		break;
 		
-		case "All L's":
+		case 28:
 		res = "L";
-		break;
-		
-		
-		
-		
-		
-		case "EH - Set":
-		res = "EH";
-		break;
-		
-		case "Ih - Sit":
-		res = "IH";
-		break;
-		
-		case "Ooh - Soot":
-		res = "UH";
-		break;
-		
-		case "Uh - Shut":
-		res = ["AH1", "AH2"];
-		break;
-		
-		case "The Schwa":
-		res = ["AH0", "ER0"];
-		break;
-		
-		case "Ee - See":
-		res = ["IY1", "IY2"];
-		break;
-		
-		case "Oo - Sue":
-		res = "UW";
-		break;
-		
-		case "Er - Sir":
-		res = ["ER1", "ER2"];
-		break;
-		
-		case "Ay - Say":
-		res = "EY";
-		break;
-		
-		case "I - Sigh":
-		res = "AY";
-		break;
-		
-		case "Ow - Sound":
-		res = "AW";
-		break;
-		
-		case "O - So":
-		res = "OW";
-		break;
-		
-		case "Oy - Soy":
-		res = "OY";
 		break;
 		
 		default:
@@ -1505,17 +1652,75 @@ var menuToSound = function(txt) {
 	
 }
 
+var clearBox = function () {
+	
+	$('#input-txt').val('');
+	
+}
+
+var showBox = function () {
+	$('html, body').animate({ scrollTop: 0 }, 'fast');
+	$('#input-txt').css('display', 'block');
+	$('#showBoxBtn').css('display', 'none');
+	$('#convertBtn').css('display', 'inline-block').animate({opacity: 1}, 1000);
+	$('#clearBtn').css('display', 'inline-block').animate({opacity: 1}, 1000);
+}
+
+// One-time functions
+
+var getPopWords = function() {
+			
+	var popWordClient = new XMLHttpRequest();
+	popWordClient.open('GET', poploc);
+	
+	popWordClient.onreadystatechange = function() {
+		popWordstxt = popWordClient.responseText;
+		
+	}
+	
+	popWordClient.addEventListener("load", getArticles);
+
+	popWordClient.send();
+	
+}
+
+var getArrayFromMenu = function (menuArr) {
+	
+	var output = "";
+	
+	for (var i = 0; i < menuArr.length; i++) {
+		
+		output += '"' + vowelMenu("",i) + '",';
+		
+	}
+	
+	
+	
+}
+
+// Onload
+
 window.onload = function() {
 	
 		var client = new XMLHttpRequest();
-		client.open('GET', 'cmellon.txt');
+		client.open('GET', cmellonloc);
 		
 		client.onreadystatechange = function() {
-		cmellontxt = client.responseText;
+			
+			cmellontxt = client.responseText;
 		}
 		
-		client.send();
+		client.addEventListener("load", getPopWords);
+
 		
+		client.send();
+
 		menuListener();
+		
 		switchSoundList("Consonant");
+		sortDimensions();
+
+		
+//		setTimeout(newArticle, 100);
+		
 }

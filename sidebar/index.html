@@ -1,0 +1,123 @@
+<html>
+<head>
+<link rel="stylesheet" href="/phonetics/stylesheet.css">
+<meta charset="UTF-8">
+</head>
+<body>
+<div class="header">
+<div class="header-content">
+<div style="display:inline-block;">
+	<h1 class="title">Phonetic Translator</h1>
+</div>
+<div style="display:inline-block;">
+
+	<select id="formType">
+	<option value="cons">Consonant</option>
+	<option value="vowel">Vowel</option>
+	<option value="other">Other</option>
+	</select>
+	
+	<select id="formSound">
+	</select>
+	
+	<select id="formPosition">
+	<option value="any">Any Position</option>
+	<option value="start">At Start</option>
+	<option value="end">At End</option>
+	</select>
+	
+	<button id="formSubmit" onclick="searchButtonPressed()">Search</button>
+	<button id="reset-btn" onclick="resetScans();">Reset</button>
+
+</div>
+<div style="display:inline-block;">
+<!--<p id="foundTxt" style="color:white; font-family: arial;"></p>-->
+</div>
+
+</div>
+</div>
+
+<div class="container">
+
+<div id="input-div" class="full-width">
+	<textarea id="input-txt" style="width:700px;height:240px;" placeholder="Copy and paste some text into this box - a news article, a monologue, or anything you like. &#13;&#10;&#13;&#10;Or, press 'New Article' to use one of our pre-loaded practice texts. &#13;&#10;&#13;&#10;When you're ready to practice, press 'Convert'."></textarea>
+</div>
+<div id="btn-div" style="text-align: center;" class="full-width">
+	<button class="sound-btn" id="button" style="text-align: center;" onclick="newArticle();">New Article</button>
+	<button class="sound-btn" id="button" style="text-align: center;" onclick="onPush();">Convert</button>
+	<button class="sound-btn" id="button" style="text-align: center;" onclick="clearBox();">Clear Box</button>
+</div>
+
+<div class="full-width">
+
+<div class="content" style="width:440px;">
+
+<div id="twister-div">
+	
+</div>
+
+<div id="output-div" style="padding-right:10px;width:430px;">
+	<p id="output-txt"></p>
+</div>
+
+</div>
+
+<div class="sidebar">
+<div class="login-box">
+<input type="text" name="fullname" placeholder="Full Name">
+<button class="sound-btn">Submit</button>
+<p>Can't remember which sounds to work on? Submit your full name in the box above.</p>
+</div>
+
+<div class="soundcard">
+	<div class="soundcard-title">
+	<span class="soundcard-title-txt">/t/ - Tie</span>
+	</div>
+	<div class="soundcard-content">
+	<span class="soundcard-content-txt">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</span>
+	</div>
+	<div class="soundcard-footer">
+	<button class="soundcard-btn">Find All</button>
+	<button class="soundcard-btn">Play</button>
+	<button class="soundcard-btn">Delete</button>
+	</div>
+</div>
+<div class="soundcard">
+	<div class="soundcard-title">
+	<span class="soundcard-title-txt">/d/ - Do</span>
+	</div>
+	<div class="soundcard-content">
+	<span class="soundcard-content-txt">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</span>
+	</div>
+	<div class="soundcard-footer">
+	<button class="soundcard-btn">Find All</button>
+	<button class="soundcard-btn">Play</button>
+	<button class="soundcard-btn">Delete</button>
+	</div>
+</div>
+<div class="soundcard">
+	<div class="soundcard-title">
+	<span class="soundcard-title-txt">/f/ - Fill</span>
+	</div>
+	<div class="soundcard-content">
+	<span class="soundcard-content-txt">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</span>
+	</div>
+	<div class="soundcard-footer">
+	<button class="soundcard-btn">Find All</button>
+	<button class="soundcard-btn">Play</button>
+	<button class="soundcard-btn">Delete</button>
+	</div>
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/phonetics/main.js"></script>
+<script src="/phonetics/articleworker.js"></script>
+</body>
+</html>
